@@ -1,56 +1,59 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
+local set = vim.keymap.set
 
-local Util = require("lazyvim.util")
+set("n", "<leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
--- Move swap the current line up or down and swap line in splace
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+-- set("n", "<c-j>", "<c-w><c-j>")
+-- set("n", "<c-k>", "<c-w><c-k>")
+-- set("n", "<c-l>", "<c-w><c-l>")
+-- set("n", "<c-h>", "<c-w><c-h>")
 
--- Keep cursor centered in screen when half jumping
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
+set("v", "J", ":m '>+1<CR>gv=gv")
+set("v", "K", ":m '<-2<CR>gv=gv")
 
-vim.keymap.set("n", "<leader>hv", function()
-    vim.cmd("%!xxd")
-end)
+set("n", "]d", vim.diagnostic.goto_next)
+set("n", "[d", vim.diagnostic.goto_prev)
 
-vim.keymap.del({ "n", "x" }, "j")
-vim.keymap.del({ "n", "x" }, "<Down>")
-vim.keymap.del({ "n", "x" }, "k")
-vim.keymap.del({ "n", "x" }, "<Up>")
+set("n", "<M-,>", "<c-w>5<", { desc = "Increase width" })
+set("n", "<M-.>", "<c-w>5>", { desc = "Decrease width" })
+set("n", "<M-t>", "<C-W>+", { desc = "Increase height" })
+set("n", "<M-s>", "<C-W>-", { desc = "Decrease height" })
 
-vim.keymap.del("n", "<A-j>")
-vim.keymap.del("n", "<A-k>")
-vim.keymap.del("i", "<A-j>")
-vim.keymap.del("i", "<A-k>")
-vim.keymap.del("v", "<A-j>")
-vim.keymap.del("v", "<A-k>")
+-- buffers
+set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+set("n", "<leader>bo", require("buffer").close_others, { desc = "Close all open buffer the active buffer" })
 
--- Terminal
-local lazyterm = function(opts)
-    Util.terminal(
-        nil,
-        vim.tbl_deep_extend("force", {
-            cwd = Util.root(),
-            border = "rounded",
-            env = {
-                TMUX = "",
-            },
-        }, opts or {})
-    )
-end
+-- Clear search with <esc>
+set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
 
-vim.keymap.del("n", "<leader>ft")
-vim.keymap.del("n", "<leader>fT")
+-- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
+set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
+set("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
+set("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
+set("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
+set("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
+set("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 
-vim.keymap.set("n", "<c-/>", lazyterm, { desc = "Terminal (root dir)" })
-vim.keymap.set("n", "<c-_>", lazyterm, { desc = "which_key_ignore" })
+-- better indenting
+set("v", "<", "<gv")
+set("v", ">", ">gv")
 
-vim.keymap.set("n", "<leader>Q", "q", { desc = "Register macro" })
-vim.keymap.set("n", "q", "<nop>")
+-- lazy
+set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
-vim.keymap.set("n", "YY", "^y$", { desc = "Yank line without new line" })
+-- Diagnostic
+set("n", "]d", vim.diagnostic.goto_next)
+set("n", "[d", vim.diagnostic.goto_prev)
 
-vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Oil" })
+local terminal = require("config.terminal")
+
+vim.keymap.set("n", "<c-/>", terminal.open, { desc = "Terminal" })
+vim.keymap.set("n", "<c-_>", terminal.open, { desc = "wich_key_ignore" })
+
+vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
+vim.keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
+vim.keymap.set("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
+
+vim.keymap.set("n", "<leader>gg", require("config.lazygit").open, { desc = "Lazygit" })

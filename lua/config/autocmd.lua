@@ -1,11 +1,12 @@
--- Autocmds are automatically loaded on the VeryLazy event
--- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
--- Add any additional autocmds here
---
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
 
--- local Util = require("lazyvim.util")
 
--- Save on buffer exit
 vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
     callback = function(args)
         if args.file == nil or args.file == "" then
@@ -19,6 +20,9 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
         if string.find(args.file, "__harpoon") then
             return
         end
+
+        -- Section for format on save
+        -- Disabled, since some open source project don't have consistend format
 
         -- local buf = args.buf
 
@@ -65,6 +69,7 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
         end
     end,
 })
+
 
 -- gopls cgo generate
 vim.api.nvim_create_autocmd("LspAttach", {

@@ -1,48 +1,66 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
+local opt = vim.opt
 
-vim.opt.guicursor = ""
+opt.guicursor = ""
 
 vim.g.root_spec = { { ".git", "lua" }, "cwd" }
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.list = true
-vim.opt.expandtab = false
-vim.opt.smartindent = true
+opt.clipboard = "unnamedplus"
+opt.confirm = true
 
-vim.opt.wrap = false
+opt.number = true
+opt.relativenumber = true
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undofile = true
+opt.showmode = false
 
-vim.opt.hlsearch = false
-vim.opt.termguicolors = true
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = false
+opt.smartindent = true
 
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
+opt.wrap = false
 
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile = true
+opt.swapfile = false
+opt.backup = false
+opt.undofile = true
 
-vim.g.netrw_browse_split = 0
-vim.g.netrw_banner = 0
-vim.g.netrw_winsize = 25
+opt.ignorecase = true
+opt.smartcase = true
+
+opt.updatetime = 250
+opt.timeoutlen = 300
+
+opt.splitright = true
+opt.splitbelow = true
+
+opt.hlsearch = false
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+opt.inccommand = "split"
+opt.termguicolors = true
+
+opt.list = true
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+
+opt.cursorline = true
+
+opt.scrolloff = 8
+opt.signcolumn = "yes"
+
+opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+opt.undofile = true
 
 vim.g.autoformat = false
 
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-    opts = opts or {}
-    opts.border = "rounded"
-    return orig_util_open_floating_preview(contents, syntax, opts, ...)
+	opts = opts or {}
+	opts.border = "rounded"
+	return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
 
 vim.filetype.add({
-    extension = {
-        templ = "templ",
-    },
+	extension = {
+		templ = "templ",
+	},
 })

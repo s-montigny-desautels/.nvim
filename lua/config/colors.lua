@@ -1,4 +1,4 @@
-local Job = require("plenary.job")
+local job = require("plenary.job")
 
 local setTheme = function(val)
     vim.schedule(function()
@@ -10,7 +10,14 @@ local setTheme = function(val)
     end)
 end
 
-Job:new({
+job:new({
+    command = "gnome-theme-watcher",
+    on_stdout = function(_, val)
+        setTheme(val)
+    end,
+}):start()
+
+job:new({
     command = "gnome-theme-watcher",
     args = { "--watch" },
     on_stdout = function(_, val)
