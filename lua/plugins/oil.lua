@@ -3,22 +3,24 @@ return {
         "stevearc/oil.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
         lazy = false,
-        keys = {
-            {
-                "<leader>fd",
-                function()
-                    require("oil").open_float(nil)
-                end,
-            },
-        },
         config = function()
             require("oil").setup({
-                default_file_explorer = true,
-                skip_confirm_for_simple_edits = true,
+                columns = { "icon" },
+                keymaps = {
+                    ["<C-h>"] = false,
+                    ["<C-l>"] = false,
+                    ["<M-h>"] = "actions.select_split",
+                    ["<M-l>"] = "actions.refresh",
+                },
                 view_options = {
                     show_hidden = true,
                 },
+                default_file_explorer = true,
+                skip_confirm_for_simple_edits = true,
             })
+
+            vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+            vim.keymap.set("n", "<leader>fd", require("oil").toggle_float)
         end,
     },
 }

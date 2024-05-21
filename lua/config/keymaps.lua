@@ -51,3 +51,6 @@ vim.keymap.set("n", "<c-_>", lazyterm, { desc = "which_key_ignore" })
 vim.keymap.set("n", "<leader>Q", "q", { desc = "Register macro" })
 vim.keymap.set("n", "q", "<nop>")
 
+vim.keymap.set("n", "YY", "^y$", { desc = "Yank line without new line" })
+
+vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Oil" })

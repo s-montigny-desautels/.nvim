@@ -9,7 +9,8 @@ vim.g.root_spec = { { ".git", "lua" }, "cwd" }
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.opt.list = true
+vim.opt.expandtab = false
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
@@ -39,3 +40,9 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
     opts.border = "rounded"
     return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
+
+vim.filetype.add({
+    extension = {
+        templ = "templ",
+    },
+})

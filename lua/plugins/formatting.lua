@@ -19,6 +19,9 @@ return {
         optional = true,
         opts = {
             formatters_by_ft = {
+                ["sql"] = { "sql_formatter" },
+                ["templ"] = { "templ" },
+                ["c"] = { "clang-format" },
                 ["javascript"] = { "prettierd" },
                 ["javascriptreact"] = { "prettierd" },
                 ["typescript"] = { "prettierd" },
@@ -35,6 +38,11 @@ return {
                 ["markdown.mdx"] = { "prettierd" },
                 ["graphql"] = { "prettierd" },
                 ["handlebars"] = { "prettierd" },
+            },
+            formatters = {
+                sql_formatter = {
+                    prepend_args = { "-c", '{"keywordCase": "upper", "dataTypeCase": "upper"}' },
+                },
             },
         },
     },

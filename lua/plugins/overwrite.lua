@@ -3,10 +3,20 @@ return {
     { "rafamadriz/friendly-snippets", enabled = false },
     { "nvim-treesitter/nvim-treesitter-context", enabled = false },
     { "folke/flash.nvim", enabled = false },
+    { "lukas-reineke/headlines.nvim", enabled = false },
     {
         "catppuccin",
         opts = {
             transparent_background = true,
+            highlight_overrides = {
+                all = function(colors)
+                    return {
+						-- https://github.com/catppuccin/nvim/issues/699
+						-- The default color is bad for my color blindness
+                        ["@keyword.operator"] = { fg = colors.mauve },
+                    }
+                end,
+            },
         },
     },
     {
@@ -17,14 +27,6 @@ return {
                 theme = "auto",
                 component_separators = "|",
                 section_separators = "",
-            },
-        },
-    },
-    {
-        "echasnovski/mini.indentscope",
-        opts = {
-            draw = {
-                animation = require("mini.indentscope").gen_animation.none(),
             },
         },
     },

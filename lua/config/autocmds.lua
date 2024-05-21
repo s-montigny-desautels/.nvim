@@ -4,23 +4,6 @@
 --
 
 -- local Util = require("lazyvim.util")
---
---
-
-local function dump(o)
-    if type(o) == "table" then
-        local s = "{ "
-        for k, v in pairs(o) do
-            if type(k) ~= "number" then
-                k = '"' .. k .. '"'
-            end
-            s = s .. "[" .. k .. "] = " .. dump(v) .. ","
-        end
-        return s .. "} "
-    else
-        return tostring(o)
-    end
-end
 
 -- Save on buffer exit
 vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
@@ -51,7 +34,15 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
         -- end
         --
         -- Util.format.format({ force = true, buf = args.buf })
-        vim.cmd("wa")
+
+        if vim.api.nvim_buf_get_option(args.buf, "modified") then
+            vim.api.nvim_buf_call(args.buf, function()
+                vim.cmd("silent! write")
+            end)
+        end
+
+        -- If I want to save all buffer eventually
+        -- vim.cmd("silent! wall")
     end,
 })
 
@@ -76,7 +67,6 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
 })
 
 -- gopls cgo generate
-
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(ev)
         local buf = ev.buf

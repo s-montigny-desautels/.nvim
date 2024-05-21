@@ -44,14 +44,9 @@ require("lazy").setup({
         { import = "lazyvim.plugins.extras.dap.core" },
         --Formatting
         { import = "lazyvim.plugins.extras.formatting.black" },
-        -- { import = "lazyvim.plugins.extras.formatting.prettier" },
 
         -- Test
         { import = "lazyvim.plugins.extras.test.core" },
-
-        -- Other
-        { import = "lazyvim.plugins.extras.editor.aerial" },
-        { import = "lazyvim.plugins.extras.coding.copilot" },
 
         -- My plugins
         { import = "plugins" },
@@ -60,7 +55,7 @@ require("lazy").setup({
         lazy = false,
         version = false, -- always use the latest git commit
     },
-    install = { colorscheme = { "tokyonight", "catppuccin" } },
+    install = { colorscheme = { "catppuccin" } },
     checker = { enabled = false }, -- automatically check for plugin updates
     change_detection = { notify = false },
     performance = {
