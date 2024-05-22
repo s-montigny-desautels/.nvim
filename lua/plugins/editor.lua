@@ -42,4 +42,16 @@ return {
 			end, "Next Trouble/Quickfix Item")
 		end,
 	},
+
+	{
+		"shortcuts/no-neck-pain.nvim",
+		version = "*",
+		config = function()
+			require("no-neck-pain").setup({
+				width = 200,
+			})
+
+			vim.keymap.set("n", "<leader>zz", "<cmd>:NoNeckPain<CR>", { desc = "Toggle NoNeckPain" })
+		end,
+	},
 }

@@ -116,7 +116,9 @@ local function server_settings()
 	local lspconfig = require("lspconfig")
 	local git_root_dir = lspconfig.util.root_pattern(".git")
 	local ok, vue_language_server_path = pcall(find_vue_path)
-	assert(ok, "Vue language server not found. It need to be installed with mason")
+	if not ok then
+		vue_language_server_path = ""
+	end
 
 	return {
 		gopls = {
@@ -174,8 +176,6 @@ local function server_settings()
 				"typescriptreact",
 				"javascript",
 				"javascriptreact",
-				"json",
-				"jsonc",
 				"vue",
 			},
 		},
@@ -210,7 +210,7 @@ return {
 	{
 		"smjonas/inc-rename.nvim",
 		config = function()
-			require("inc_rename").setup()
+			require("inc_rename").setup({})
 		end,
 	},
 
@@ -252,6 +252,9 @@ return {
 			local ensure_installed = {
 				"stylua",
 				"lua_ls",
+				"tailwindcss-language-server",
+				"prettierd",
+				"black",
 			}
 
 			vim.list_extend(ensure_installed, servers_to_install)
@@ -271,6 +274,14 @@ return {
 				}, config)
 
 				lspconfig[name].setup(config)
+			end
+
+			local highlightHandler = vim.lsp.handlers["textDocument/documentHighlight"]
+			vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
+				if not vim.api.nvim_buf_is_loaded(ctx.bufnr) then
+					return
+				end
+				return highlightHandler(err, result, ctx, config)
 			end
 
 			-- I hate this.

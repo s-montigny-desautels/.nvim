@@ -28,7 +28,7 @@ return {
 					mappings = {
 						n = {
 							["q"] = actions.close,
-							["<c-d>"] = actions.delete_buffer
+							["<c-d>"] = actions.delete_buffer,
 						},
 					},
 				},
@@ -58,18 +58,27 @@ return {
 				["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
 			})
 
-			map("<leader>sh", builtin.help_tags, "[S]earch [H]elp")
-			map("<leader>sk", builtin.keymaps, "[S]earch [K]eymaps")
-			map("<leader>sf", builtin.find_files, "[S]earch [F]iles")
-			map("<leader>sw", builtin.grep_string, "[S]earch current [W]ord")
-			map("<leader>sg", builtin.live_grep, "[S]earch by [G]rep")
-			map("<leader>sr", builtin.resume, "[S]earch [R]esume")
-			map("<leader>s.", builtin.oldfiles, "[S]earch Recent Files")
+			map("<leader>ph", builtin.help_tags, "Search Help")
+			map("<leader>pk", builtin.keymaps, "Search Keymaps")
+			map("<leader>pf", function()
+				builtin.find_files({
+					cwd = require("util").root_dir(),
+					hidden = true,
+					no_ignore_parent = true,
+				})
+			end, "Search Files")
+
+			map("<C-p>", function()
+				builtin.git_files({ show_untracked = true })
+			end, "Search Git Files")
+
+			map("<leader>pw", builtin.grep_string, "Search current Word")
+			map("<leader>pg", builtin.live_grep, "Search by Grep")
+			map("<leader>pr", builtin.resume, "Search Resume")
 			map("<leader>:", "<cmd>Telescope command_history<CR>", "Command History")
 			map("<leader>/", builtin.current_buffer_fuzzy_find, "[/] Fuzzily search in current buffer")
 
-			-- From LazyVim, keep for now so I can migrate to <leader>sf
-			map("<leader><space>", builtin.buffers, "Find Files")
+			map("<leader>pb", builtin.buffers, "Search Buffers")
 		end,
 	},
 }

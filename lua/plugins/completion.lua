@@ -15,6 +15,8 @@ return {
 			local cmp = require("cmp")
 
 			vim.opt.completeopt = { "menu", "menuone", "noselect" }
+			vim.opt.pumblend = 10
+			vim.opt.pumheight = 10
 
 			cmp.setup({
 				sources = {

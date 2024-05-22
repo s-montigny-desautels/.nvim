@@ -11,6 +11,8 @@ return {
 		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
+				modules = {},
+				ignore_install = {},
 				ensure_installed = { "c", "bash", "lua", "vim", "vimdoc", "markdown", "query" },
 				auto_install = true,
 				sync_install = false,
@@ -18,6 +20,16 @@ return {
 				additional_vim_regex_highlighting = false,
 				indent = { enabled = true },
 				textobjects = {
+					select = {
+						enable = true,
+						lookahead = true,
+						keymaps = {
+							["af"] = "@function.outer",
+							["if"] = "@function.inner",
+							["ac"] = "@class.outer",
+							["ic"] = "@class.inner",
+						},
+					},
 					move = {
 						enable = true,
 						goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },

@@ -9,8 +9,9 @@ return {
                 keymaps = {
                     ["<C-h>"] = false,
                     ["<C-l>"] = false,
+                    ["<C-p>"] = false,
                     ["<M-h>"] = "actions.select_split",
-                    ["<M-l>"] = "actions.refresh",
+                    ["<C-r>"] = "actions.refresh",
                 },
                 view_options = {
                     show_hidden = true,

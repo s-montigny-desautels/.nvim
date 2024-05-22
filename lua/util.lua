@@ -15,4 +15,25 @@ M.dump = function(o)
 	end
 end
 
+M.root_dir = function()
+	local job = require("plenary.job")
+
+	local cwd = vim.loop.cwd()
+
+	local path, code = job:new({
+		command = "git",
+		args = {
+			"rev-parse",
+			"--show-toplevel",
+		},
+		cwd = cwd,
+	}):sync()
+
+	if code ~= 0 then
+		return nil
+	end
+
+	return table.concat(path, "")
+end
+
 return M

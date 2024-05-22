@@ -2,11 +2,6 @@ local set = vim.keymap.set
 
 set("n", "<leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
--- set("n", "<c-j>", "<c-w><c-j>")
--- set("n", "<c-k>", "<c-w><c-k>")
--- set("n", "<c-l>", "<c-w><c-l>")
--- set("n", "<c-h>", "<c-w><c-h>")
-
 set("v", "J", ":m '>+1<CR>gv=gv")
 set("v", "K", ":m '<-2<CR>gv=gv")
 
@@ -17,6 +12,12 @@ set("n", "<M-,>", "<c-w>5<", { desc = "Increase width" })
 set("n", "<M-.>", "<c-w>5>", { desc = "Decrease width" })
 set("n", "<M-t>", "<C-W>+", { desc = "Increase height" })
 set("n", "<M-s>", "<C-W>-", { desc = "Decrease height" })
+
+set("n", "<leader>qq", "<cmd>qa<CR>", { desc = "Quit All" })
+
+-- Remap macro register
+set("n", "<leader>Q", "q", { desc = "Register macro" })
+set("n", "q", "<nop>")
 
 -- buffers
 set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
@@ -46,6 +47,8 @@ set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 -- Diagnostic
 set("n", "]d", vim.diagnostic.goto_next)
 set("n", "[d", vim.diagnostic.goto_prev)
+
+set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
 local terminal = require("config.terminal")
 
