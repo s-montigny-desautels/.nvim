@@ -55,7 +55,7 @@ return {
 			end
 
 			require("which-key").register({
-				["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
+				["<leader>p"] = { name = "[P]rompt", _ = "which_key_ignore" },
 			})
 
 			map("<leader>ph", builtin.help_tags, "Search Help")

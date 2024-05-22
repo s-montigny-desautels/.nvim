@@ -82,6 +82,10 @@ return {
 			which_key.setup({
 				triggers = { "<leader>", "g" },
 			})
+
+			which_key.register({
+				["<leader>b"] = { name = "[B]uffer", _ = "which_key_ignore" },
+			})
 		end,
 	},
 }

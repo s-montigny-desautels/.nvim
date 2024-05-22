@@ -13,7 +13,7 @@ set("n", "<M-.>", "<c-w>5>", { desc = "Decrease width" })
 set("n", "<M-t>", "<C-W>+", { desc = "Increase height" })
 set("n", "<M-s>", "<C-W>-", { desc = "Decrease height" })
 
-set("n", "<leader>qq", "<cmd>qa<CR>", { desc = "Quit All" })
+set("n", "<leader>sq", "<cmd>qa<CR>", { desc = "[S]ession [Q]uit" })
 
 -- Remap macro register
 set("n", "<leader>Q", "q", { desc = "Register macro" })

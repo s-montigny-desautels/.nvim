@@ -24,10 +24,14 @@ return {
 						gs.nav_hunk("prev")
 					end, "Prev Hunk")
 
-					map({ "v" }, "<leader>hs", function()
+					require("which-key").register({
+						["<leader>g"] = { name = "[G]it", _ = "which_key_ignore" },
+					})
+
+					map({ "v" }, "<leader>gs", function()
 						gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 					end, "git stage hunk")
-					map("n", "<leader>hs", gs.stage_hunk, "Git [S]tage Hunk")
+					map("n", "<leader>gs", gs.stage_hunk, "Git [S]tage Hunk")
 				end,
 			})
 		end,

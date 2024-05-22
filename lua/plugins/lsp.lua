@@ -12,7 +12,9 @@ local function set_keymap(args)
 		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
 	end
 
-	require("which-key").register({ name = "[C]ode", _ = "which_key_ignore" })
+	require("which-key").register({
+		["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
+	})
 
 	map("<leader>cf", function()
 		conform.format({ async = true, lsp_fallback = true })

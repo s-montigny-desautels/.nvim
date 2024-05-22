@@ -13,6 +13,10 @@ return {
 				end,
 			})
 
+			require("which-key").register({
+				["<leader>h"] = { name = "[H]arpoon", _ = "which_key_ignore" },
+			})
+
 			vim.keymap.set("n", "<leader>ha", function()
 				harpoon:list():add()
 			end, { desc = "[H]arpoon [A]dd" })

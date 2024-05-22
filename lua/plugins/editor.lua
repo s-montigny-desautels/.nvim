@@ -51,7 +51,11 @@ return {
 				width = 200,
 			})
 
-			vim.keymap.set("n", "<leader>zz", "<cmd>:NoNeckPain<CR>", { desc = "Toggle NoNeckPain" })
+			require("which-key").register({
+				["<leader>z"] = { name = "[Z]en Mode", _ = "which_key_ignore" },
+			})
+
+			vim.keymap.set("n", "<leader>zz", "<cmd>:NoNeckPain<CR>", { desc = "Toggle NoNeckPain (Zen Mode)" })
 		end,
 	},
 }
