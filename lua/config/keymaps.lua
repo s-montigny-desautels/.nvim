@@ -15,6 +15,10 @@ set("n", "<M-s>", "<C-W>-", { desc = "Decrease height" })
 
 set("n", "<leader>sq", "<cmd>qa<CR>", { desc = "[S]ession [Q]uit" })
 
+set("n", "<leader>ud", function()
+    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+end, { desc = "Toggle Diagnostic" })
+
 -- Remap macro register
 set("n", "<leader>Q", "q", { desc = "Register macro" })
 set("n", "q", "<nop>")
@@ -25,6 +29,7 @@ set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 set("n", "<leader>bo", require("buffer").close_others, { desc = "Close all open buffer the active buffer" })
+set("n", "<leader>bd", "<cmd>bp|bd #<cr>", { desc = "Close current buffer" })
 
 -- Clear search with <esc>
 set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })

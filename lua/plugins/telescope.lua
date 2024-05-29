@@ -78,7 +78,9 @@ return {
 			map("<leader>:", "<cmd>Telescope command_history<CR>", "Command History")
 			map("<leader>/", builtin.current_buffer_fuzzy_find, "[/] Fuzzily search in current buffer")
 
-			map("<leader>pb", builtin.buffers, "Search Buffers")
+			map("<leader>pb", function()
+				builtin.buffers({ sort_mru = true })
+			end, "Search Buffers")
 		end,
 	},
 }

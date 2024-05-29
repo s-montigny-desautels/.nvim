@@ -85,7 +85,17 @@ return {
 
 			which_key.register({
 				["<leader>b"] = { name = "[B]uffer", _ = "which_key_ignore" },
+				["<leader>u"] = { name = "[U]i Toggle", _ = "which_key_ignore" },
 			})
 		end,
 	},
+
+	-- Enable to show fancy rename prompt
+	-- {
+	-- 	"stevearc/dressing.nvim",
+	-- 	enabled = true,
+	-- 	config = function()
+	-- 		require("dressing").setup({})
+	-- 	end,
+	-- },
 }

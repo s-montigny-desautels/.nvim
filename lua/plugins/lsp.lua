@@ -31,9 +31,11 @@ local function set_keymap(args)
 
 	map("K", vim.lsp.buf.hover, "Hover Documentation")
 
-	vim.keymap.set("n", "<leader>cr", function()
-		return ":IncRename " .. vim.fn.expand("<cword>")
-	end, { desc = "[C]ode [R]ename", expr = true })
+	-- vim.keymap.set("n", "<leader>cr", function()
+	-- 	return ":IncRename " .. vim.fn.expand("<cword>")
+	-- end, { desc = "[C]ode [R]ename", expr = true })
+
+	map("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
 
 	map("<leader>ca", function()
 		vim.lsp.buf.code_action({
@@ -264,19 +266,32 @@ return {
 
 			-- Setup all servers
 			local lspconfig = require("lspconfig")
-			for name, config in pairs(servers) do
-				config = vim.tbl_deep_extend("force", {}, {
-					capabilities = capabilities,
-					handlers = {
-						-- Silence the `No Information Available` message
-						["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-							silent = true,
-						}),
-					},
-				}, config)
 
-				lspconfig[name].setup(config)
+			local default_config = {
+				capabilities = capabilities,
+				handlers = {
+					-- Silence the `No Information Available` message
+					["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+						silent = true,
+					}),
+				},
+			}
+
+			local setup_handlers = {
+				function(name)
+					lspconfig[name].setup(default_config)
+				end,
+			}
+
+			for name, config in pairs(servers) do
+				config = vim.tbl_deep_extend("force", {}, default_config, config)
+
+				setup_handlers[name] = function()
+					lspconfig[name].setup(config)
+				end
 			end
+
+			require("mason-lspconfig").setup_handlers(setup_handlers)
 
 			local highlightHandler = vim.lsp.handlers["textDocument/documentHighlight"]
 			vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
@@ -329,6 +344,14 @@ return {
 					handlebars = { "prettierd" },
 				},
 			})
+		end,
+	},
+	{
+		"linux-cultist/venv-selector.nvim",
+		branch = "regexp",
+		config = function()
+			require("venv-selector").setup()
+			vim.keymap.set("n", "<leader>cv", "<cmd>:VenvSelect<CR>", { desc = "Seelct VirtualEnv" })
 		end,
 	},
 }
