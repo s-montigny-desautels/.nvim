@@ -16,7 +16,7 @@ set("n", "<M-s>", "<C-W>-", { desc = "Decrease height" })
 set("n", "<leader>sq", "<cmd>qa<CR>", { desc = "[S]ession [Q]uit" })
 
 set("n", "<leader>ud", function()
-    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+	vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { desc = "Toggle Diagnostic" })
 
 -- Remap macro register
@@ -65,3 +65,7 @@ vim.keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 vim.keymap.set("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
 vim.keymap.set("n", "<leader>gg", require("config.lazygit").open, { desc = "Lazygit" })
+
+vim.keymap.set("n", "<leader>cgj", '0w"kyiwA<space>`json:"<esc>"kpb~A"`<esc>', {
+	desc = "Generate GO json struc tag",
+})
