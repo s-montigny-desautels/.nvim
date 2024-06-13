@@ -1,5 +1,4 @@
 return {
-	{ "tpope/vim-sleuth" },
 	{
 		"folke/todo-comments.nvim",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
@@ -59,6 +58,50 @@ return {
 			})
 
 			vim.keymap.set("n", "<leader>zz", "<cmd>:NoNeckPain<CR>", { desc = "Toggle NoNeckPain (Zen Mode)" })
+		end,
+	},
+
+	{
+		"nvim-pack/nvim-spectre",
+		build = false,
+		config = function()
+			require("spectre").setup({
+				open_cmd = "noswapfile vnew",
+			})
+
+			vim.keymap.set("n", "<leader>rr", function()
+				require("spectre").toggle()
+			end, { desc = "Toggle Spectre" })
+
+			vim.keymap.set("n", "<leader>rw", function()
+				require("spectre").open_visual({ select_word = true })
+			end, { desc = "Search current word" })
+
+			vim.keymap.set("v", "<leader>rw", function()
+				require("spectre").open_visual()
+			end, { desc = "Search current word" })
+		end,
+	},
+
+	-- Auto close html tags
+	{
+		"windwp/nvim-ts-autotag",
+		config = function()
+			require("nvim-ts-autotag").setup({
+				opts = {
+					enable_close = true,
+					enable_rename = true,
+					enable_close_on_slash = false,
+				},
+			})
+		end,
+	},
+
+	-- Enhance Neovim's native comments:
+	{
+		"folke/ts-comments.nvim",
+		config = function()
+			require("ts-comments").setup()
 		end,
 	},
 }
