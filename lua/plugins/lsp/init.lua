@@ -4,118 +4,6 @@ local find_vue_path = function()
 	return registry.get_package("vue-language-server"):get_install_path() .. "/node_modules/@vue/language-server"
 end
 
-local function set_keymap(args)
-	local conform = require("conform")
-	local buf = args.buf
-
-	local function map(keys, func, desc)
-		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
-	end
-
-	require("which-key").register({
-		["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
-	})
-
-	map("<leader>cf", function()
-		conform.format({ async = true, lsp_fallback = true })
-	end, "[F]ormat buffer")
-
-	local builtin = require("telescope.builtin")
-
-	map("gd", function()
-		builtin.lsp_definitions({ reuse_win = true })
-	end, "[G]oto [D]efinition")
-
-	map("gr", builtin.lsp_references, "[G]oto [R]eferences")
-	map("gI", builtin.lsp_implementations, "[G]oto [I]mplementation")
-
-	map("K", vim.lsp.buf.hover, "Hover Documentation")
-
-	-- vim.keymap.set("n", "<leader>cr", function()
-	-- 	return ":IncRename " .. vim.fn.expand("<cword>")
-	-- end, { desc = "[C]ode [R]ename", expr = true })
-
-	map("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
-
-	map("<leader>ca", function()
-		vim.lsp.buf.code_action({
-			context = {
-				only = {
-					"source",
-				},
-				diagnostics = {},
-			},
-		})
-	end, "[C]ode [A]ction")
-end
-
-local function lsp_support_method(args, method)
-	local client = vim.lsp.get_client_by_id(args.data.client_id)
-	if client == nil or not client.supports_method(method, { bufnr = args.buf }) then
-		return false
-	end
-
-	return true
-end
-
-local function codelens(args)
-	local buf = args.buf
-
-	if not lsp_support_method(args, "textDocument/codeLens") then
-		return
-	end
-
-	vim.keymap.set("n", "<leader>cc", function()
-		local params = {
-			textDocument = vim.lsp.util.make_text_document_params(buf),
-		}
-		local result = vim.lsp.buf_request_sync(buf, "textDocument/codeLens", params, 3000)
-
-		local codeLens = {}
-
-		for _, res in pairs(result or {}) do
-			for _, r in pairs(res.result or {}) do
-				table.insert(codeLens, r)
-			end
-		end
-
-		vim.ui.select(codeLens, {
-			prompt = "Select code lens",
-			format_item = function(item)
-				return item.command.title .. " (line " .. item.range.start.line .. ")"
-			end,
-		}, function(selected)
-			if not selected then
-				return
-			end
-			vim.lsp.buf_request_sync(buf, "workspace/executeCommand", selected.command, 3000)
-		end)
-	end, {
-		desc = "Code Lens",
-		buffer = buf,
-	})
-end
-
-local function cursor_highlight(args)
-	local buf = args.buf
-
-	if not lsp_support_method(args, "textDocument/documentHighlight") then
-		return
-	end
-
-	vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "CursorMoved", "CursorMovedI" }, {
-		group = vim.api.nvim_create_augroup("lsp_word_" .. buf, { clear = true }),
-		buffer = buf,
-		callback = function(ev)
-			if ev.event:find("CursorMoved") then
-				vim.lsp.buf.clear_references()
-			else
-				vim.lsp.buf.document_highlight()
-			end
-		end,
-	})
-end
-
 local function server_settings()
 	local lspconfig = require("lspconfig")
 	local git_root_dir = lspconfig.util.root_pattern(".git")
@@ -157,6 +45,7 @@ local function server_settings()
 				},
 			},
 		},
+
 		tsserver = {
 			root_dir = git_root_dir,
 			implicitProjectConfiguration = {
@@ -205,7 +94,13 @@ local function server_settings()
 			},
 		},
 
-		lua_ls = {},
+		lua_ls = {
+			Lua = {
+				diagnostics = {
+					disable = { "missing-field" },
+				},
+			},
+		},
 	}
 end
 
@@ -259,6 +154,8 @@ return {
 				"tailwindcss-language-server",
 				"prettierd",
 				"black",
+				"goimports",
+				"gofumpt",
 			}
 
 			vim.list_extend(ensure_installed, servers_to_install)
@@ -293,24 +190,24 @@ return {
 
 			require("mason-lspconfig").setup_handlers(setup_handlers)
 
-			local highlightHandler = vim.lsp.handlers["textDocument/documentHighlight"]
+			local handler = vim.lsp.handlers["textDocument/documentHighlight"]
 			vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
 				if not vim.api.nvim_buf_is_loaded(ctx.bufnr) then
 					return
 				end
-				return highlightHandler(err, result, ctx, config)
+
+				vim.lsp.buf.clear_references()
+				return handler(err, result, ctx, config)
 			end
 
 			-- I hate this.
 			vim.lsp.inlay_hint.enable(false)
 
-			vim.api.nvim_create_autocmd("LspAttach", {
-				callback = function(args)
-					set_keymap(args)
-					codelens(args)
-					cursor_highlight(args)
-				end,
-			})
+			require("plugins.lsp.bootstrap").setup()
+			-- vim.api.nvim_create_autocmd("LspAttach", {
+			-- 	callback = function(args)
+			-- 	end,
+			-- })
 		end,
 	},
 
