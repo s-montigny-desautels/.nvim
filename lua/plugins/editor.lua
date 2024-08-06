@@ -17,10 +17,10 @@ return {
 
 			local trouble = require("trouble")
 			trouble.setup({
-				use_diagnostic_signs = true,
+				modes = { lsp = { win = { position = "right" } } },
 			})
 
-			map("<leader>xx", "<cmd>TroubleToggle workspace_diagnostics<CR>", "Workspace Diagnostics (Trouble)")
+			map("<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", "Workspace Diagnostics (Trouble)")
 			map("[q", function()
 				if trouble.is_open() then
 					trouble.previous({ skip_groups = true, jump = true })
@@ -53,8 +53,8 @@ return {
 				width = 200,
 			})
 
-			require("which-key").register({
-				["<leader>z"] = { name = "[Z]en Mode", _ = "which_key_ignore" },
+			require("which-key").add({
+				{ "<leader>z", group = "[Z]en Mode" },
 			})
 
 			vim.keymap.set("n", "<leader>zz", "<cmd>:NoNeckPain<CR>", { desc = "Toggle NoNeckPain (Zen Mode)" })
@@ -102,6 +102,13 @@ return {
 		"folke/ts-comments.nvim",
 		config = function()
 			require("ts-comments").setup()
+		end,
+	},
+
+	{
+		"mbbill/undotree",
+		config = function()
+			vim.keymap.set("n", "<leader>uu", vim.cmd.UndotreeToggle, { desc = "Toggle undotree" })
 		end,
 	},
 }

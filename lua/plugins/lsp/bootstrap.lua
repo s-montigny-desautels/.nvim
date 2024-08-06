@@ -106,8 +106,8 @@ function M._set_keymap(buf)
 		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
 	end
 
-	require("which-key").register({
-		["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
+	require("which-key").add({
+		{ "<leader>c", group = "[C]ode" },
 	})
 
 	map("<leader>cf", function()
@@ -206,6 +206,5 @@ function M.setup_cursor_highlight()
 		})
 	end)
 end
-
 
 return M

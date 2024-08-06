@@ -16,6 +16,11 @@ return {
 					topdelete = { text = "‾" },
 					changedelete = { text = "~" },
 				},
+				current_line_blame = true,
+				current_line_blame_opts = {
+					delay = 500,
+					virt_text_pos = "eol",
+				},
 				on_attach = function(buf)
 					local gs = require("gitsigns")
 					local function map(mode, key, func, desc)
@@ -30,17 +35,17 @@ return {
 						gs.nav_hunk("prev")
 					end, "Prev Hunk")
 
-					require("which-key").register({
-						["<leader>g"] = { name = "[G]it", _ = "which_key_ignore" },
+					require("which-key").add({
+						{ "<leader>g", group = "[G]it" },
 					})
 
-					map({ "v" }, "<leader>gs", function()
-						gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-					end, "git stage hunk")
-					map("n", "<leader>gs", gs.stage_hunk, "Git [S]tage Hunk")
+					map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
+					map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
+					map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", "Git Status")
 
 					map("n", "<leader>ub", gs.toggle_current_line_blame, "Toggle Current Line [B]lame")
 					map("n", "<leader>gd", gs.preview_hunk_inline, "Git Diff Current Line")
+					map("n", "<leader>gr", gs.reset_hunk, "Git Reset Hunk")
 				end,
 			})
 		end,

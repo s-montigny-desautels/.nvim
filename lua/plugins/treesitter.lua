@@ -51,6 +51,18 @@ return {
 					},
 				},
 			})
+
+			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+			parser_config.bruno = {
+				install_info = {
+					url = "~/oss/tree-sitter-bruno",
+					files = { "src/parser.c", "src/scanner.c" },
+					branch = "main",
+					generate_requires_npm = true,
+					requires_generate_from_grammar = false,
+				},
+				filetype = "bru",
+			}
 		end,
 	},
 }

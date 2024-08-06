@@ -5,16 +5,32 @@ return {
 		config = function()
 			require("lualine").setup({
 				options = {
-					icons_enabled = false,
+					icons_enabled = true,
 					theme = "auto",
 					globalstatus = true,
 					component_separators = "|",
 					section_separators = "",
 				},
 				sections = {
-					lualine_a = { "mode" },
+					lualine_a = {
+						{
+							function()
+								return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+							end,
+						},
+					},
 					lualine_b = { "branch" },
 					lualine_c = {
+						{
+							"filetype",
+							colored = true,
+							icon_only = true,
+							separator = "",
+							padding = { left = 1, right = 0 },
+						},
+						{ "filename", file_status = true, newfile_status = true, path = 1 },
+					},
+					lualine_x = {
 						{
 							"diagnostics",
 							symbols = {
@@ -24,10 +40,6 @@ return {
 								info = " ",
 							},
 						},
-						{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-						{ "filename" },
-					},
-					lualine_x = {
 						{
 							"diff",
 							symbols = {
@@ -50,11 +62,6 @@ return {
 					lualine_y = {
 						{ "progress", seperator = " ", padding = { left = 1, right = 0 } },
 						{ "location", padding = { left = 0, right = 1 } },
-					},
-					lualine_z = {
-						function()
-							return " " .. os.date("%R")
-						end,
 					},
 				},
 			})
@@ -80,12 +87,28 @@ return {
 		config = function()
 			local which_key = require("which-key")
 			which_key.setup({
-				triggers = { "<leader>", "g" },
+				preset = "helix",
+				plugins = {
+					marks = false,
+					registers = false,
+					spelling = {
+						enabled = false,
+					},
+					presets = {
+						operators = false, -- adds help for operators like d, y, ...
+						motions = false, -- adds help for motions
+						text_objects = false, -- help for text objects triggered after entering an operator
+						windows = true, -- default bindings on <c-w>
+						nav = true, -- misc bindings to work with windows
+						z = true, -- bindings for folds, spelling and others prefixed with z
+						g = true, -- bindings for prefixed with g
+					},
+				},
 			})
 
-			which_key.register({
-				["<leader>b"] = { name = "[B]uffer", _ = "which_key_ignore" },
-				["<leader>u"] = { name = "[U]i Toggle", _ = "which_key_ignore" },
+			which_key.add({
+				{ "<leader>b", group = "[B]uffer" },
+				{ "<leader>u", group = "[U]i Toggle" },
 			})
 		end,
 	},

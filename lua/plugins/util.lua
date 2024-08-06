@@ -8,8 +8,8 @@ return {
 				options = { "buffers", "curdir", "tabpages", "winsize" },
 			})
 
-			require("which-key").register({
-				["<leader>s"] = { name = "[S]ession Management", _ = "which_key_ignore" },
+			require("which-key").add({
+				{ "<leader>s", group = "[S]ession Management" },
 			})
 
 			vim.keymap.set("n", "<leader>sr", persistence.load, { desc = "[S]ession [R]eload" })

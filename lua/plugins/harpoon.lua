@@ -13,8 +13,8 @@ return {
 				end,
 			})
 
-			require("which-key").register({
-				["<leader>h"] = { name = "[H]arpoon", _ = "which_key_ignore" },
+			require("which-key").add({
+				{ "<leader>h", group = "[H]arpoon" },
 			})
 
 			vim.keymap.set("n", "<leader>ha", function()

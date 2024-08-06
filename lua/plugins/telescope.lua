@@ -54,8 +54,8 @@ return {
 				vim.keymap.set("n", keys, func, { desc = desc })
 			end
 
-			require("which-key").register({
-				["<leader>p"] = { name = "[P]rompt", _ = "which_key_ignore" },
+			require("which-key").add({
+				{ "<leader>p", group = "[P]rompt" },
 			})
 
 			map("<leader>ph", builtin.help_tags, "Search Help")

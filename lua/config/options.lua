@@ -62,5 +62,6 @@ end
 vim.filetype.add({
 	extension = {
 		templ = "templ",
+		bru = "bruno",
 	},
 })

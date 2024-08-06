@@ -17,6 +17,7 @@ local function server_settings()
 			settings = {
 				gopls = {
 					usePlaceholders = false,
+					completeFunctionCalls = false,
 					analyses = {
 						fieldalignment = false,
 					},
@@ -37,6 +38,33 @@ local function server_settings()
 			},
 		},
 
+		tailwindcss = {
+			settings = {
+				tailwindCSS = {
+					classAttributes = {
+						"class",
+						"className",
+						"ngClass",
+						"activeClass",
+						"exactActiveClass",
+						"enterActiveClass",
+						"enterFromClass",
+						"enterToClass",
+						"leaveActiveClass",
+						"leaveFromClass",
+						"leaveToClass",
+						"innerClass",
+						"inner-class",
+					},
+					experimental = {
+						classRegex = {
+							"tw`([^`]*)`",
+						},
+					},
+				},
+			},
+		},
+
 		volar = {
 			root_dir = git_root_dir,
 			init_options = {
@@ -46,7 +74,56 @@ local function server_settings()
 			},
 		},
 
+		vtsls = {
+			root_dir = git_root_dir,
+			filetypes = {
+				"typescript",
+				"typescriptreact",
+				"javascript",
+				"javascriptreact",
+				"vue",
+			},
+			settings = {
+				complete_function_calls = true,
+				vtsls = {
+					enableMoveToFileCodeAction = true,
+					autoUseWorkspaceTsdk = true,
+					experimental = {
+						completion = {
+							enableServerSideFuzzyMatch = true,
+						},
+					},
+					tsserver = {
+						globalPlugins = {
+							{
+								name = "@vue/typescript-plugin",
+								location = vue_language_server_path,
+								languages = { "vue" },
+								configNamespace = "typescript",
+								enableForWorkspaceTypeScriptVersions = true,
+							},
+						},
+					},
+				},
+				typescript = {
+					updateImportsOnFileMove = { enabled = "always" },
+					suggest = {
+						completeFunctionCalls = true,
+					},
+					inlayHints = {
+						enumMemberValues = { enabled = true },
+						functionLikeReturnTypes = { enabled = true },
+						parameterNames = { enabled = "literals" },
+						parameterTypes = { enabled = true },
+						propertyDeclarationTypes = { enabled = true },
+						variableTypes = { enabled = false },
+					},
+				},
+			},
+		},
+
 		tsserver = {
+			enabled = false,
 			root_dir = git_root_dir,
 			implicitProjectConfiguration = {
 				checkJs = true,
@@ -127,6 +204,13 @@ return {
 		end,
 	},
 
+	{
+		"williamboman/mason.nvim",
+		config = function()
+			require("mason").setup()
+		end,
+	},
+
 	-- LSP setup
 	{
 		"neovim/nvim-lspconfig",
@@ -138,7 +222,6 @@ return {
 			"b0o/SchemaStore.nvim",
 		},
 		config = function()
-			require("mason").setup()
 			require("mason-lspconfig").setup()
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
