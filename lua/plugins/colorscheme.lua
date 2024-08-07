@@ -47,6 +47,7 @@ return {
 					markdown = true,
 					mini = true,
                     fidget = true,
+					render_markdown = false,
 					native_lsp = {
 						enabled = true,
 						underlines = {
@@ -58,7 +59,6 @@ return {
 					},
 					navic = { enabled = true, custom_bg = "lualine" },
 					neotest = true,
-					neotree = true,
 					semantic_tokens = true,
 					telescope = true,
 					treesitter = true,

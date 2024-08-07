@@ -29,6 +29,7 @@ opt.smartcase = true
 
 opt.updatetime = 250
 opt.timeoutlen = 300
+opt.conceallevel = 2
 
 opt.splitright = true
 opt.splitbelow = true
@@ -52,6 +53,8 @@ opt.undofile = true
 
 vim.g.autoformat = false
 
+opt.shortmess:append({ W = true, c = true, C = true })
+
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 	opts = opts or {}
@@ -65,3 +68,4 @@ vim.filetype.add({
 		bru = "bruno",
 	},
 })
+
