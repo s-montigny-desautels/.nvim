@@ -1,9 +1,9 @@
+local util = require("util")
+
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		version = false,
 		event = "VimEnter",
-		branch = "0.1.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{
@@ -25,6 +25,10 @@ return {
 					layout_strategy = "horizontal",
 					layout_config = { prompt_position = "top" },
 					sorting_strategy = "ascending",
+					path_display = {
+						"filename_first",
+						"truncate",
+					},
 					mappings = {
 						n = {
 							["q"] = actions.close,
@@ -38,10 +42,15 @@ return {
 						initial_mode = "normal",
 					},
 				},
-				fzf = {},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
+					},
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "ignore_case",
 					},
 				},
 			})
@@ -69,7 +78,15 @@ return {
 			end, "Search Files")
 
 			map("<C-p>", function()
-				builtin.git_files({ show_untracked = true })
+				if util.is_in_git() then
+					builtin.git_files({ show_untracked = true })
+				else
+					builtin.find_files({
+						cwd = require("util").root_dir(),
+						hidden = true,
+						no_ignore_parent = true,
+					})
+				end
 			end, "Search Git Files")
 
 			map("<leader>pw", builtin.grep_string, "Search current Word")
@@ -81,6 +98,8 @@ return {
 			map("<leader>pb", function()
 				builtin.buffers({ sort_mru = true })
 			end, "Search Buffers")
+
+			map("<leader>gs", "<cmd>Telescope git_status<CR>", "Git Status")
 		end,
 	},
 }

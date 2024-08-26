@@ -110,9 +110,6 @@ function M._set_keymap(buf)
 		{ "<leader>c", group = "[C]ode" },
 	})
 
-	map("<leader>cf", function()
-		conform.format({ async = true, lsp_fallback = true })
-	end, "[F]ormat buffer")
 
 	local builtin = require("telescope.builtin")
 

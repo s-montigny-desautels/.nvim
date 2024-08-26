@@ -55,6 +55,12 @@ vim.g.autoformat = false
 
 opt.shortmess:append({ W = true, c = true, C = true })
 
+opt.smoothscroll = true
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldtext = ""
+opt.foldlevel = 99
+
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 	opts = opts or {}
@@ -68,4 +74,3 @@ vim.filetype.add({
 		bru = "bruno",
 	},
 })
-

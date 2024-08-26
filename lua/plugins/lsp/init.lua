@@ -106,6 +106,9 @@ local function server_settings()
 					},
 				},
 				typescript = {
+					-- tsserver = {
+					-- 	log = "verbose",
+					-- },
 					updateImportsOnFileMove = { enabled = "always" },
 					suggest = {
 						completeFunctionCalls = true,
@@ -301,7 +304,7 @@ return {
 			require("conform").setup({
 				formatters_by_ft = {
 					lua = { "stylua" },
-					sql = { "sql_formatter" },
+					sql = { "pg_format" },
 					templ = { "templ" },
 					c = { "clang-format" },
 					go = { "goimports", "gofumpt" },
@@ -324,6 +327,10 @@ return {
 					handlebars = { "prettierd" },
 				},
 			})
+
+			vim.keymap.set("n", "<leader>cf", function()
+				require("conform").format({ async = true, lsp_fallback = true })
+			end, { desc = "LSP: " .. "[F]ormat buffer" })
 		end,
 	},
 	{

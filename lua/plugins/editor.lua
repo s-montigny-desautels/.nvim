@@ -84,18 +84,18 @@ return {
 	},
 
 	-- Auto close html tags
-	{
-		"windwp/nvim-ts-autotag",
-		config = function()
-			require("nvim-ts-autotag").setup({
-				opts = {
-					enable_close = true,
-					enable_rename = true,
-					enable_close_on_slash = false,
-				},
-			})
-		end,
-	},
+	-- {
+	-- 	"windwp/nvim-ts-autotag",
+	-- 	config = function()
+	-- 		require("nvim-ts-autotag").setup({
+	-- 			opts = {
+	-- 				enable_close = true,
+	-- 				enable_rename = true,
+	-- 				enable_close_on_slash = false,
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 
 	-- Enhance Neovim's native comments:
 	{
