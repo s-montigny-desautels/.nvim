@@ -225,6 +225,10 @@ return {
 			"b0o/SchemaStore.nvim",
 		},
 		config = function()
+			require("which-key").add({
+				{ "<leader>c", group = "[C]ode" },
+			})
+
 			require("mason-lspconfig").setup()
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()

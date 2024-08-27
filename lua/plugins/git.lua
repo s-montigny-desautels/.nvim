@@ -8,6 +8,10 @@ return {
 	{
 		"lewis6991/gitsigns.nvim",
 		config = function()
+			require("which-key").add({
+				{ "<leader>g", group = "[G]it" },
+			})
+
 			require("gitsigns").setup({
 				signs = {
 					add = { text = "+" },
@@ -34,10 +38,6 @@ return {
 					map("n", "[h", function()
 						gs.nav_hunk("prev")
 					end, "Prev Hunk")
-
-					require("which-key").add({
-						{ "<leader>g", group = "[G]it" },
-					})
 
 					map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
 					map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")

@@ -106,11 +106,6 @@ function M._set_keymap(buf)
 		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
 	end
 
-	require("which-key").add({
-		{ "<leader>c", group = "[C]ode" },
-	})
-
-
 	local builtin = require("telescope.builtin")
 
 	map("gd", function()
@@ -122,7 +117,10 @@ function M._set_keymap(buf)
 
 	map("K", vim.lsp.buf.hover, "Hover Documentation")
 
-	map("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
+	-- map("<leader>cr", ":IncRename ", "[C]ode [R]ename")
+	vim.keymap.set("n", "<leader>cr", function()
+		return ":IncRename " .. vim.fn.expand("<cword>")
+	end, { expr = true, buffer = buf, desc = "LSP: [C]ode [R]ename" })
 
 	map("<leader>ca", function()
 		vim.lsp.buf.code_action({

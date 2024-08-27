@@ -69,6 +69,10 @@ return {
 				open_cmd = "noswapfile vnew",
 			})
 
+			require("which-key").add({
+				{ "<leader>r", group = "[R]ename" },
+			})
+
 			vim.keymap.set("n", "<leader>rr", function()
 				require("spectre").toggle()
 			end, { desc = "Toggle Spectre" })
