@@ -1,5 +1,12 @@
 local set = vim.keymap.set
 
+set("n", "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+set("n", "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+set("n", "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+set("n", "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+
+set("n", "<leader>uw", "<cmd>set wrap!<CR>", { desc = "Toggle line wrap" })
+
 set("n", "<leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
 set("v", "J", ":m '>+1<CR>gv=gv")

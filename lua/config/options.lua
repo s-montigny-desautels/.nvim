@@ -16,9 +16,10 @@ opt.tabstop = 4
 opt.softtabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = false
-opt.smartindent = true
+opt.smartindent = false
 
 opt.wrap = false
+opt.linebreak = true
 
 opt.swapfile = false
 opt.backup = false

@@ -113,6 +113,9 @@ local function server_settings()
 					suggest = {
 						completeFunctionCalls = true,
 					},
+					preferences = {
+						importModuleSpecifier = "project-relative",
+					},
 					inlayHints = {
 						enumMemberValues = { enabled = true },
 						functionLikeReturnTypes = { enabled = true },
@@ -125,33 +128,33 @@ local function server_settings()
 			},
 		},
 
-		tsserver = {
-			enabled = false,
-			root_dir = git_root_dir,
-			implicitProjectConfiguration = {
-				checkJs = true,
-			},
-			init_options = {
-				preferences = {
-					importModuleSpecifierPreference = "relative",
-					importModuleSpecifierEnding = "minimal",
-				},
-				plugins = {
-					{
-						name = "@vue/typescript-plugin",
-						location = vue_language_server_path,
-						languages = { "vue" },
-					},
-				},
-			},
-			filetypes = {
-				"typescript",
-				"typescriptreact",
-				"javascript",
-				"javascriptreact",
-				"vue",
-			},
-		},
+		-- tsserver = {
+		-- 	enabled = false,
+		-- 	root_dir = git_root_dir,
+		-- 	implicitProjectConfiguration = {
+		-- 		checkJs = true,
+		-- 	},
+		-- 	init_options = {
+		-- 		preferences = {
+		-- 			importModuleSpecifierPreference = "relative",
+		-- 			importModuleSpecifierEnding = "minimal",
+		-- 		},
+		-- 		plugins = {
+		-- 			{
+		-- 				name = "@vue/typescript-plugin",
+		-- 				location = vue_language_server_path,
+		-- 				languages = { "vue" },
+		-- 			},
+		-- 		},
+		-- 	},
+		-- 	filetypes = {
+		-- 		"typescript",
+		-- 		"typescriptreact",
+		-- 		"javascript",
+		-- 		"javascriptreact",
+		-- 		"vue",
+		-- 	},
+		-- },
 
 		jsonls = {
 			settings = {
