@@ -1,7 +1,5 @@
 local opt = vim.opt
 
-opt.guicursor = ""
-
 vim.g.root_spec = { { ".git", "lua" }, "cwd" }
 
 opt.clipboard = "unnamedplus"

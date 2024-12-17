@@ -2,6 +2,7 @@ return {
 	{
 		"hrsh7th/nvim-cmp",
 		lazy = false,
+		enabled = false,
 		priority = 100,
 		dependencies = {
 			"onsails/lspkind.nvim",
@@ -51,6 +52,37 @@ return {
 				sources = {
 					{ name = "vim-dadbod-completion" },
 					{ name = "buffer" },
+				},
+			})
+		end,
+	},
+	{
+		"saghen/blink.cmp",
+		lazy = false,
+		version = "v0.*",
+		config = function()
+			---@diagnostic disable missing-fields
+			require("blink-cmp").setup({
+				keymap = { preset = "default" },
+
+				appearance = {
+				},
+
+				sources = {
+					default = { "lsp", "path", "buffer" },
+				},
+
+				completion = {
+					trigger = {
+						show_on_insert_on_trigger_character = false,
+
+					},
+					menu = {
+						border = "rounded",
+						draw = {
+							columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
+						},
+					},
 				},
 			})
 		end,

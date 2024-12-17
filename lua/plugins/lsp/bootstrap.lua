@@ -20,7 +20,6 @@ function M.setup()
 		return ret
 	end
 
-	M.setup_cursor_highlight()
 	M.setup_codelens()
 
 	M.on_attach(function(client, buffer)
@@ -100,8 +99,6 @@ function M._check_methods(client, buffer)
 end
 
 function M._set_keymap(buf)
-	local conform = require("conform")
-
 	local function map(keys, func, desc)
 		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
 	end
@@ -117,10 +114,7 @@ function M._set_keymap(buf)
 
 	map("K", vim.lsp.buf.hover, "Hover Documentation")
 
-	-- map("<leader>cr", ":IncRename ", "[C]ode [R]ename")
-	vim.keymap.set("n", "<leader>cr", function()
-		return ":IncRename " .. vim.fn.expand("<cword>")
-	end, { expr = true, buffer = buf, desc = "LSP: [C]ode [R]ename" })
+	map("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
 
 	map("<leader>ca", function()
 		vim.lsp.buf.code_action({
@@ -132,18 +126,6 @@ function M._set_keymap(buf)
 			},
 		})
 	end, "[C]ode [A]ction")
-end
-
-function M.has_method(buffer, method)
-	local clients = vim.lsp.get_clients({ bufnr = buffer })
-
-	for _, client in ipairs(clients) do
-		if client.supports_method(method) then
-			return true
-		end
-	end
-
-	return false
 end
 
 function M.setup_codelens()
@@ -176,28 +158,6 @@ function M.setup_codelens()
 		end, {
 			desc = "Code Lens",
 			buffer = buf,
-		})
-	end)
-end
-
-function M.setup_cursor_highlight()
-	local method = "textDocument/documentHighlight"
-
-	M.on_support_method(method, function(_, buffer)
-		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "CursorMoved", "CursorMovedI" }, {
-			group = vim.api.nvim_create_augroup("lsp_word_" .. buffer, { clear = true }),
-			buffer = buffer,
-			callback = function(ev)
-				if not M.has_method(buffer, method) then
-					return false
-				end
-
-				if ev.event:find("CursorMoved") then
-					vim.lsp.buf.clear_references()
-				else
-					vim.lsp.buf.document_highlight()
-				end
-			end,
 		})
 	end)
 end

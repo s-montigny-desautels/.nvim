@@ -6,13 +6,19 @@ return {
 		config = function()
 			require("catppuccin").setup({
 				flavour = "latte",
-				transparent_background = true,
+				transparent_background = false,
 				highlight_overrides = {
 					all = function(colors)
 						return {
 							-- https://github.com/catppuccin/nvim/issues/699
 							-- The default color is bad for my color blindness
 							["@keyword.operator"] = { fg = colors.mauve },
+
+							BlinkCmpKind = { fg = colors.blue },
+							BlinkCmpMenu = { fg = colors.text },
+							BlinkCmpMenuBorder = { fg = colors.blue },
+							BlinkCmpDocBorder = { fg = colors.blue },
+							BlinkCmpSignatureHelpActiveParameter = { fg = colors.mauve },
 						}
 					end,
 				},
@@ -36,7 +42,8 @@ return {
 					operators = {},
 				},
 				integrations = {
-					cmp = true,
+					cmp = false,
+					blink_cmp = true,
 					dashboard = true,
 					gitsigns = true,
 					illuminate = true,
@@ -46,7 +53,7 @@ return {
 					mason = true,
 					markdown = true,
 					mini = true,
-                    fidget = true,
+					fidget = true,
 					render_markdown = false,
 					native_lsp = {
 						enabled = true,

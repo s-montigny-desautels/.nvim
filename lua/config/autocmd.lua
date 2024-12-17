@@ -5,6 +5,13 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+vim.api.nvim_create_autocmd("User", {
+	pattern = "PersistenceLoadPost",
+	callback = function()
+		require("buffer").close_unamed()
+	end,
+})
+
 -- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	pattern = { "json", "jsonc", "json5" },
@@ -27,32 +34,11 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
 			return
 		end
 
-		-- Section for format on save
-		-- Disabled, since some open source project don't have consistend format
-
-		-- local buf = args.buf
-
-		-- local found = false
-		-- for _, formatter in ipairs(Util.format.resolve(buf) or {}) do
-		--     if formatter.active then
-		--         found = true
-		--     end
-		-- end
-		-- --
-		-- if not found then
-		--     return
-		-- end
-		--
-		-- Util.format.format({ force = true, buf = args.buf })
-
 		if vim.api.nvim_buf_get_option(args.buf, "modified") then
 			vim.api.nvim_buf_call(args.buf, function()
 				vim.cmd("silent! write")
 			end)
 		end
-
-		-- If I want to save all buffer eventually
-		-- vim.cmd("silent! wall")
 	end,
 })
 
@@ -82,7 +68,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local buf = ev.buf
 
 		local client = vim.lsp.get_client_by_id(ev.data.client_id)
-		if not client.supports_method("textDocument/codeLens", { bufnr = buf }) then
+		if client ~= nil and not client.supports_method("textDocument/codeLens", { bufnr = buf }) then
 			return
 		end
 

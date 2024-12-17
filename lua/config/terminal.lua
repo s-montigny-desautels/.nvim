@@ -9,6 +9,7 @@ M.open = function(cmd, opts)
 		ft = "floating_term",
 		size = { width = 0.9, height = 0.9 },
 		border = "rounded",
+		backdrop = 100,
 	}, opts or {}, { persistent = true })
 
 	if terminals[key] and terminals[key]:buf_valid() then
@@ -36,8 +37,10 @@ M.open = function(cmd, opts)
 			end,
 		})
 
-		return terminal
+		vim.cmd("noh")
 	end
+
+	return terminals[key]
 end
 
 return M

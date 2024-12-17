@@ -30,7 +30,7 @@ M.root_dir = function()
 	}):sync()
 
 	if code ~= 0 then
-		return cwd
+		return nil
 	end
 
 	return table.concat(path, "")

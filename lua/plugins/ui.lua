@@ -29,6 +29,7 @@ return {
 							padding = { left = 1, right = 0 },
 						},
 						{ "filename", file_status = true, newfile_status = true, path = 1 },
+						{ "aerial", sep = " ", sep_icon = "", depth = 5, dense = false, dense_sep = ".", colored = true },
 					},
 					lualine_x = {
 						{

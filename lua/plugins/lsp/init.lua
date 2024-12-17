@@ -16,6 +16,7 @@ local function server_settings()
 		gopls = {
 			settings = {
 				gopls = {
+					buildFlags = { "-tags=tools" },
 					usePlaceholders = false,
 					completeFunctionCalls = false,
 					analyses = {
@@ -70,6 +71,16 @@ local function server_settings()
 			init_options = {
 				vue = {
 					hybridMode = true,
+				},
+			},
+			settings = {
+				vue = {
+					complete = {
+						casing = {
+							props = "camel",
+							tags = "pascal",
+						},
+					},
 				},
 			},
 		},
@@ -226,6 +237,12 @@ return {
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "folke/neodev.nvim", opts = {} },
 			"b0o/SchemaStore.nvim",
+			{
+				"nvim-flutter/flutter-tools.nvim",
+				config = function()
+					require("flutter-tools").setup({})
+				end,
+			},
 		},
 		config = function()
 			require("which-key").add({
@@ -234,8 +251,8 @@ return {
 
 			require("mason-lspconfig").setup()
 
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+			-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+			-- capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
 			local servers = server_settings()
 
@@ -258,7 +275,7 @@ return {
 			local lspconfig = require("lspconfig")
 
 			local default_config = {
-				capabilities = capabilities,
+				capabilities = require("blink.cmp").get_lsp_capabilities(),
 				handlers = {
 					-- Silence the `No Information Available` message
 					["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {

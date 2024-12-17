@@ -32,4 +32,14 @@ M.close_others = function()
 	end
 end
 
+M.close_unamed = function()
+	local buffers = M.list()
+	for _, buf in pairs(buffers) do
+		local name = vim.api.nvim_buf_get_name(buf)
+		if name == "" then
+			vim.api.nvim_buf_delete(buf, { force = true })
+		end
+	end
+end
+
 return M
