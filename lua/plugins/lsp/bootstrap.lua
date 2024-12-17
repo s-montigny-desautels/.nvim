@@ -103,14 +103,12 @@ function M._set_keymap(buf)
 		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
 	end
 
-	local builtin = require("telescope.builtin")
+	local fzf = require("fzf-lua")
 
-	map("gd", function()
-		builtin.lsp_definitions({ reuse_win = true })
-	end, "[G]oto [D]efinition")
+	map("gd", fzf.lsp_definitions, "[G]oto [D]efinition")
 
-	map("gr", builtin.lsp_references, "[G]oto [R]eferences")
-	map("gI", builtin.lsp_implementations, "[G]oto [I]mplementation")
+	map("gr", fzf.lsp_references, "[G]oto [R]eferences")
+	map("gI", fzf.lsp_implementations, "[G]oto [I]mplementation")
 
 	map("K", vim.lsp.buf.hover, "Hover Documentation")
 

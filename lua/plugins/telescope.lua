@@ -3,6 +3,7 @@ return {
 	{
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
+		enabled = false,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{
@@ -82,43 +83,39 @@ return {
 				vim.keymap.set("n", keys, func, { desc = desc })
 			end
 
-			require("which-key").add({
-				{ "<leader>p", group = "[P]rompt" },
-			})
+			-- map("<leader>ph", builtin.help_tags, "Search Help")
+			-- map("<leader>pk", builtin.keymaps, "Search Keymaps")
+			-- map("<leader>pf", function()
+			-- 	builtin.find_files({
+			-- 		cwd = require("util").root_dir(),
+			-- 		hidden = true,
+			-- 		no_ignore_parent = true,
+			-- 	})
+			-- end, "Search Files")
 
-			map("<leader>ph", builtin.help_tags, "Search Help")
-			map("<leader>pk", builtin.keymaps, "Search Keymaps")
-			map("<leader>pf", function()
-				builtin.find_files({
-					cwd = require("util").root_dir(),
-					hidden = true,
-					no_ignore_parent = true,
-				})
-			end, "Search Files")
+			-- map("<C-p>", function()
+			-- 	if util.is_in_git() then
+			-- 		builtin.git_files({ show_untracked = true })
+			-- 	else
+			-- 		builtin.find_files({
+			-- 			cwd = require("util").root_dir(),
+			-- 			hidden = true,
+			-- 			no_ignore_parent = true,
+			-- 		})
+			-- 	end
+			-- end, "Search Git Files")
 
-			map("<C-p>", function()
-				if util.is_in_git() then
-					builtin.git_files({ show_untracked = true })
-				else
-					builtin.find_files({
-						cwd = require("util").root_dir(),
-						hidden = true,
-						no_ignore_parent = true,
-					})
-				end
-			end, "Search Git Files")
-
-			map("<leader>pw", builtin.grep_string, "Search current Word")
-			map("<leader>pg", builtin.live_grep, "Search by Grep")
-			map("<leader>pr", builtin.resume, "Search Resume")
-			map("<leader>:", "<cmd>Telescope command_history<CR>", "Command History")
-			map("<leader>/", builtin.current_buffer_fuzzy_find, "[/] Fuzzily search in current buffer")
-
-			map("<leader>pb", function()
-				builtin.buffers({ sort_mru = true })
-			end, "Search Buffers")
-
-			map("<leader>gs", "<cmd>Telescope git_status<CR>", "Git Status")
+			-- map("<leader>pw", builtin.grep_string, "Search current Word")
+			-- map("<leader>pg", builtin.live_grep, "Search by Grep")
+			-- map("<leader>pr", builtin.resume, "Search Resume")
+			-- map("<leader>:", "<cmd>Telescope command_history<CR>", "Command History")
+			-- map("<leader>/", builtin.current_buffer_fuzzy_find, "[/] Fuzzily search in current buffer")
+			--
+			-- map("<leader>pb", function()
+			-- 	builtin.buffers({ sort_mru = true })
+			-- end, "Search Buffers")
+			--
+			-- map("<leader>gs", "<cmd>Telescope git_status<CR>", "Git Status")
 		end,
 	},
 }
