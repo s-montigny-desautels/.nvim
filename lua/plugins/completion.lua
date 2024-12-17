@@ -1,3 +1,14 @@
+local function split(inputstr, sep)
+	if sep == nil then
+		sep = "%s"
+	end
+	local t = {}
+	for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+		table.insert(t, str)
+	end
+	return t
+end
+
 return {
 	{
 		"hrsh7th/nvim-cmp",
@@ -65,17 +76,35 @@ return {
 			require("blink-cmp").setup({
 				keymap = { preset = "default" },
 
-				appearance = {
-				},
+				appearance = {},
 
 				sources = {
 					default = { "lsp", "path", "buffer" },
+
+					providers = {
+						lsp = {
+							transform_items = function(ctx, items)
+								if vim.bo.filetype == "vue" then
+									for _, item in ipairs(items) do
+										if
+											item.textEdit
+											and string.find(item.textEdit.newText, '.+="$1"')
+											and not string.match(item.textEdit.newText, "^:")
+										then
+											item.textEdit.newText = split(item.textEdit.newText, "=")[1]
+										end
+									end
+								end
+
+								return items
+							end,
+						},
+					},
 				},
 
 				completion = {
 					trigger = {
 						show_on_insert_on_trigger_character = false,
-
 					},
 					menu = {
 						border = "rounded",
