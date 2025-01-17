@@ -3,7 +3,7 @@ local job = require("plenary.job")
 local setTheme = function(val)
 	vim.schedule(function()
 		if val == "1" then
-			vim.cmd("colorscheme catppuccin-mocha")
+			vim.cmd("colorscheme kanagawa-wave")
 		else
 			vim.cmd("colorscheme catppuccin-latte")
 		end
@@ -13,9 +13,9 @@ end
 job:new({
 	command = "gnome-theme-watcher",
 	on_stdout = function(_, val)
-		setTheme(val)
-
-		-- Set theme two time, zen-mode don't color the backdrop correctly for some reason otherwise...
+		if val == nil then
+			return
+		end
 		setTheme(val)
 	end,
 }):start()

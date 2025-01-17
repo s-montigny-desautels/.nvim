@@ -74,9 +74,16 @@ return {
 		config = function()
 			---@diagnostic disable missing-fields
 			require("blink-cmp").setup({
-				keymap = { preset = "default" },
+				keymap = {
+					preset = "default",
+					cmdline = {
+						preset = "super-tab",
+					},
+				},
 
-				appearance = {},
+				appearance = {
+					use_nvim_cmp_as_default = true,
+				},
 
 				sources = {
 					default = { "lsp", "path", "buffer" },
@@ -109,11 +116,31 @@ return {
 					menu = {
 						border = "rounded",
 						draw = {
-							columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
+							columns = { { "kind_icon" }, { "label", gap = 1 } },
+
+							components = {
+								label = {
+									text = require("colorful-menu").blink_components_text,
+									highlight = require("colorful-menu").blink_components_highlight,
+								},
+							},
 						},
+						-- auto_show = function(ctx)
+						-- 	return ctx.mode ~= "cmdline"
+						-- end,
 					},
 					documentation = {
 						auto_show = true,
+						window = {
+							border = "rounded",
+						},
+					},
+				},
+
+				signature = {
+					enabled = true,
+					window = {
+						border = "rounded",
 					},
 				},
 			})

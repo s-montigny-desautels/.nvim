@@ -224,7 +224,13 @@ return {
 	{
 		"williamboman/mason.nvim",
 		config = function()
-			require("mason").setup()
+			require("mason").setup({
+				ui = {
+					border = "rounded",
+				},
+			})
+
+			vim.keymap.set("n", "<leader>lm", "<cmd>Mason<CR>", { desc = "Open mason" })
 		end,
 	},
 

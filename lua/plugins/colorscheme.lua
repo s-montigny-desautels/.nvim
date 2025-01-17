@@ -3,6 +3,7 @@ return {
 		"catppuccin/nvim",
 		name = "catppuccin",
 		priority = 1000,
+		enabled = true,
 		config = function()
 			require("catppuccin").setup({
 				flavour = "latte",
@@ -19,6 +20,10 @@ return {
 							BlinkCmpMenuBorder = { fg = colors.blue },
 							BlinkCmpDocBorder = { fg = colors.blue },
 							BlinkCmpSignatureHelpActiveParameter = { fg = colors.mauve },
+
+							NormalFloat = { bg = "none" },
+							FloatBorder = { bg = "none" },
+							FloatTitle = { bg = "none" },
 						}
 					end,
 				},
@@ -68,12 +73,63 @@ return {
 					neotest = true,
 					semantic_tokens = true,
 					telescope = true,
-					fzf=true,
+					fzf = true,
 					treesitter = true,
 					treesitter_context = true,
 					which_key = true,
 				},
 			})
+		end,
+	},
+
+	{
+		"rebelot/kanagawa.nvim",
+		name = "kanagawa",
+		priority = 1000,
+		config = function()
+			require("kanagawa").setup({
+				compile = false,
+				undercurl = true,
+				commentStyle = { italic = true },
+				functionStyle = {},
+				keywordStyle = { italic = true },
+				statementStyle = { bold = true },
+				typeStyle = {},
+				transparent = false, -- do not set background color
+				dimInactive = false, -- dim inactive window `:h hl-NormalNC`
+				terminalColors = true, -- define vim.g.terminal_color_{0,17}
+				colors = { -- add/modify theme and palette colors
+					palette = {},
+					theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
+				},
+				overrides = function(colors)
+					local theme = colors.theme
+					return {
+						-- Completion menu
+						Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
+						PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
+						PmenuSbar = { bg = theme.ui.bg_m1 },
+						PmenuThumb = { bg = theme.ui.bg_p2 },
+
+						-- Better floating window
+						NormalFloat = { bg = "none" },
+						FloatBorder = { bg = "none" },
+						FloatTitle = { bg = "none" },
+
+						-- Save an hlgroup with dark background and dimmed foreground
+						-- so that you can use it where your still want darker windows.
+						-- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
+						NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+					}
+				end,
+				theme = "lotus", -- Load "wave" theme when 'background' option is not set
+			})
+		end,
+	},
+	{
+		"xzbdmw/colorful-menu.nvim",
+		config = function()
+			require("colorful-menu").setup()
 		end,
 	},
 }

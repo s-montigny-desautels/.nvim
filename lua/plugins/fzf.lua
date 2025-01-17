@@ -24,12 +24,14 @@ return {
 					height = 0.8,
 					row = 0.5,
 					col = 0.5,
+					backdrop = 100,
 					preview = {
 						scrollchars = { "┃", "" },
 						flip_columns = 160,
 					},
 				},
 			})
+			fzf.register_ui_select()
 
 			local map = function(keys, func, desc)
 				vim.keymap.set("n", keys, func, { desc = desc })
@@ -52,7 +54,7 @@ return {
 				if require("util").is_in_git() then
 					fzf.git_files({
 						-- List all tracked files, untracked files, ignore all in .gitignore and ignore deleted files
-						cmd = "git ls-files -co --exclude-standard | grep -vE \"^$(git ls-files -d | paste -sd \"|\" -)$\"",
+						cmd = 'git ls-files -co --exclude-standard | grep -vE "^$(git ls-files -d | paste -sd "|" -)$"',
 					})
 				else
 					fzf.files({
