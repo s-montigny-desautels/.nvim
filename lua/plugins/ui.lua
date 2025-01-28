@@ -29,7 +29,15 @@ return {
 							padding = { left = 1, right = 0 },
 						},
 						{ "filename", file_status = true, newfile_status = true, path = 1 },
-						{ "aerial", sep = " ", sep_icon = "", depth = 5, dense = false, dense_sep = ".", colored = true },
+						{
+							"aerial",
+							sep = " ",
+							sep_icon = "",
+							depth = 5,
+							dense = false,
+							dense_sep = ".",
+							colored = true,
+						},
 					},
 					lualine_x = {
 						{
@@ -59,10 +67,6 @@ return {
 								end
 							end,
 						},
-					},
-					lualine_y = {
-						{ "progress", seperator = " ", padding = { left = 1, right = 0 } },
-						{ "location", padding = { left = 0, right = 1 } },
 					},
 				},
 			})
@@ -115,11 +119,11 @@ return {
 	},
 
 	-- Enable to show fancy rename prompt
-	-- {
-	-- 	"stevearc/dressing.nvim",
-	-- 	enabled = true,
-	-- 	config = function()
-	-- 		require("dressing").setup({})
-	-- 	end,
-	-- },
+	{
+		"stevearc/dressing.nvim",
+		enabled = true,
+		config = function()
+			require("dressing").setup({})
+		end,
+	},
 }

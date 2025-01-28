@@ -31,6 +31,12 @@ return {
 						flip_columns = 160,
 					},
 				},
+				buffers = {
+					actions = {
+						["ctrl-x"] = false,
+						["ctrl-d"] = { fn = fzf.actions.buf_del, reload = true },
+					},
+				},
 			})
 			fzf.register_ui_select()
 

@@ -6,6 +6,9 @@ return {
 		end,
 	},
 	{
+		"tpope/vim-unimpaired"
+	},
+	{
 		"lewis6991/gitsigns.nvim",
 		config = function()
 			require("which-key").add({

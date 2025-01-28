@@ -117,9 +117,6 @@ local function server_settings()
 					},
 				},
 				typescript = {
-					-- tsserver = {
-					-- 	log = "verbose",
-					-- },
 					updateImportsOnFileMove = { enabled = "always" },
 					suggest = {
 						completeFunctionCalls = true,
@@ -138,34 +135,6 @@ local function server_settings()
 				},
 			},
 		},
-
-		-- tsserver = {
-		-- 	enabled = false,
-		-- 	root_dir = git_root_dir,
-		-- 	implicitProjectConfiguration = {
-		-- 		checkJs = true,
-		-- 	},
-		-- 	init_options = {
-		-- 		preferences = {
-		-- 			importModuleSpecifierPreference = "relative",
-		-- 			importModuleSpecifierEnding = "minimal",
-		-- 		},
-		-- 		plugins = {
-		-- 			{
-		-- 				name = "@vue/typescript-plugin",
-		-- 				location = vue_language_server_path,
-		-- 				languages = { "vue" },
-		-- 			},
-		-- 		},
-		-- 	},
-		-- 	filetypes = {
-		-- 		"typescript",
-		-- 		"typescriptreact",
-		-- 		"javascript",
-		-- 		"javascriptreact",
-		-- 		"vue",
-		-- 	},
-		-- },
 
 		jsonls = {
 			settings = {
@@ -256,9 +225,6 @@ return {
 			})
 
 			require("mason-lspconfig").setup()
-
-			-- local capabilities = vim.lsp.protocol.make_client_capabilities()
-			-- capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
 			local servers = server_settings()
 
