@@ -56,7 +56,7 @@ opt.shortmess:append({ W = true, c = true, C = true })
 
 opt.smoothscroll = true
 opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldexpr = "v:lua.require'util'.foldexpr()"
 opt.foldtext = ""
 opt.foldlevel = 99
 

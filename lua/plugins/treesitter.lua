@@ -12,7 +12,7 @@ return {
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				modules = {},
-				ignore_install = {},
+				ignore_install = { "org" },
 				ensure_installed = {
 					"c",
 					"bash",
@@ -28,8 +28,8 @@ return {
 				},
 				auto_install = true,
 				sync_install = false,
-				highlight = { enable = true },
 				additional_vim_regex_highlighting = false,
+				highlight = { enable = true },
 				indent = { enable = true },
 				textobjects = {
 					select = {

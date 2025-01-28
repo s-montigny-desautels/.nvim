@@ -81,10 +81,6 @@ return {
 					},
 				},
 
-				appearance = {
-					use_nvim_cmp_as_default = true,
-				},
-
 				sources = {
 					default = { "lsp", "path", "buffer" },
 
@@ -116,21 +112,12 @@ return {
 					menu = {
 						border = "rounded",
 						draw = {
-							columns = { { "kind_icon" }, { "label", gap = 1 } },
-
-							components = {
-								label = {
-									text = require("colorful-menu").blink_components_text,
-									highlight = require("colorful-menu").blink_components_highlight,
-								},
-							},
+							treesitter = { "lsp" },
 						},
-						-- auto_show = function(ctx)
-						-- 	return ctx.mode ~= "cmdline"
-						-- end,
 					},
 					documentation = {
 						auto_show = true,
+						auto_show_delay_ms = 200,
 						window = {
 							border = "rounded",
 						},

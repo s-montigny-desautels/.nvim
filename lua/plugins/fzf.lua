@@ -15,6 +15,7 @@ return {
 				fzf_colors = true,
 				fzf_opts = {
 					["--no-scrollbar"] = true,
+					["--ignore-case"] = "",
 				},
 				defaults = {
 					formatter = "path.filename_first",
