@@ -76,10 +76,16 @@ return {
 			require("blink-cmp").setup({
 				keymap = {
 					preset = "default",
-					cmdline = {
-						preset = "super-tab",
-					},
+					-- cmdline = {
+					-- 	preset = "super-tab",
+					-- },
 				},
+
+				-- cmdline = {
+				-- 	keymap = {
+				-- 		preset = "super-tab",
+				-- 	},
+				-- },
 
 				sources = {
 					default = { "lsp", "path", "buffer" },

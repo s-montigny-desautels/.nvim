@@ -7,7 +7,7 @@ set("n", "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent
 
 set("n", "<leader>uw", "<cmd>set wrap!<CR>", { desc = "Toggle line wrap" })
 
-set("n", "<leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
+-- set("n", "<leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
 set("v", "J", ":m '>+1<CR>gv=gv")
 set("v", "K", ":m '<-2<CR>gv=gv")
@@ -64,7 +64,6 @@ set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
 -- vim.keymap.set("n", "<c-/>", terminal.open, { desc = "Terminal" })
 -- vim.keymap.set("n", "<c-_>", terminal.open, { desc = "wich_key_ignore" })
-
 
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
 vim.keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })

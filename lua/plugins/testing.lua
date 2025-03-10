@@ -16,7 +16,7 @@ return {
 			local neotest = require("neotest")
 			neotest.setup({
 				status = { enabled = true, virtual_text = true },
-				output = { enabled = true, open_on_run = true },
+				output = { enabled = true, open_on_run = false },
 				quickfix = {
 					enabled = true,
 					open = function()

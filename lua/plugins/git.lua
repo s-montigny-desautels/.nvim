@@ -3,10 +3,18 @@ return {
 		"tpope/vim-fugitive",
 		config = function()
 			vim.keymap.set("n", "<leader>gD", "<cmd>Gvdiffsplit<CR>", { desc = "Git Diff File" })
+			vim.keymap.set("n", "<leader>gg", "<cmd>0G<CR>", { desc = "Git fugitive" })
+			vim.keymap.set("n", "<leader>gp", "<cmd>Git push<CR>", { desc = "Git push" })
+			vim.keymap.set(
+				"n",
+				"<leader>gP",
+				"<cmd>Git push --force-with-lease<CR>",
+				{ desc = "Git (safe) force push" }
+			)
 		end,
 	},
 	{
-		"tpope/vim-unimpaired"
+		"tpope/vim-unimpaired",
 	},
 	{
 		"lewis6991/gitsigns.nvim",

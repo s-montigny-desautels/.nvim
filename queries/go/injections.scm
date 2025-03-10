@@ -1,8 +1,7 @@
 ;; extends
 
 (
- (raw_string_literal) @injection.content
-  (#match? @injection.content "^`--sql")
-  (#offset! @injection.content 0 1 0 -1)
+ (raw_string_literal_content) @injection.content
+  (#match? @injection.content "^--sql")
   (#set! injection.language "sql")
 )

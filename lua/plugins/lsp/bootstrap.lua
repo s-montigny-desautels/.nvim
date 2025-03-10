@@ -106,7 +106,7 @@ function M._set_keymap(buf)
 	local fzf = require("fzf-lua")
 
 	map("gd", function()
-		fzf.lsp_definitions({ jump_to_single_result = true })
+		fzf.lsp_definitions()
 	end, "[G]oto [D]efinition")
 
 	map("gr", fzf.lsp_references, "[G]oto [R]eferences")

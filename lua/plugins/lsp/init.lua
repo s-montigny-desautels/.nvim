@@ -95,7 +95,7 @@ local function server_settings()
 				"vue",
 			},
 			settings = {
-				complete_function_calls = true,
+				complete_function_calls = false,
 				vtsls = {
 					enableMoveToFileCodeAction = true,
 					autoUseWorkspaceTsdk = true,
@@ -119,7 +119,7 @@ local function server_settings()
 				typescript = {
 					updateImportsOnFileMove = { enabled = "always" },
 					suggest = {
-						completeFunctionCalls = true,
+						completeFunctionCalls = false,
 					},
 					preferences = {
 						importModuleSpecifier = "project-relative",
@@ -303,7 +303,7 @@ return {
 					sql = { "pg_format" },
 					templ = { "templ" },
 					c = { "clang-format" },
-					go = { "goimports", "gofumpt" },
+					go = { "goimports", "golines", "gofumpt" },
 					python = { "black" },
 					javascript = { "prettierd" },
 					javascriptreact = { "prettierd" },

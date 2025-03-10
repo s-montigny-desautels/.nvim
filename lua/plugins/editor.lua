@@ -1,5 +1,8 @@
 return {
 	{
+		"tpope/vim-sleuth",
+	},
+	{
 		"folke/todo-comments.nvim",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		config = function()
