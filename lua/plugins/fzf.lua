@@ -18,7 +18,7 @@ return {
 					["--ignore-case"] = "",
 				},
 				defaults = {
-					formatter = "path.filename_first",
+					formatter = "path.dirname_first",
 				},
 				winopts = {
 					width = 0.8,

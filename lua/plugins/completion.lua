@@ -70,7 +70,8 @@ return {
 	{
 		"saghen/blink.cmp",
 		lazy = false,
-		version = "v0.*",
+		enabled = true,
+		version = "1.*",
 		config = function()
 			---@diagnostic disable missing-fields
 			require("blink-cmp").setup({
@@ -88,9 +89,19 @@ return {
 				-- },
 
 				sources = {
-					default = { "lsp", "path", "buffer" },
+					default = {"lazydev", "lsp", "path", "buffer", "codecompanion"},
+
+					per_filetype = {
+						codecompanion = { "codecompanion" },
+					},
 
 					providers = {
+						lazydev = {
+							name = "LazyDev",
+							module = "lazydev.integrations.blink",
+							-- make lazydev completions top priority (see `:h blink.cmp`)
+							score_offset = 100,
+						},
 						lsp = {
 							transform_items = function(ctx, items)
 								if vim.bo.filetype == "vue" then
@@ -112,6 +123,8 @@ return {
 				},
 
 				completion = {
+					keyword = { range = "full" },
+					accept = { auto_brackets = { enabled = false } },
 					trigger = {
 						show_on_insert_on_trigger_character = false,
 					},

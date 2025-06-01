@@ -48,13 +48,13 @@ return {
 				Snacks.words.jump(-vim.v.count1)
 			end, { desc = "Prev Reference" })
 
-			vim.keymap.set("n", "<c-/>", function()
-				Snacks.terminal(nil, { win = { position = "float" } })
-			end, { desc = "Terminal" })
-
-			vim.keymap.set("n", "<c-_>", function()
-				Snacks.terminal(nil, { win = { position = "float" } })
-			end, { desc = "wich_key_ignore" })
+			-- vim.keymap.set("n", "<c-/>", function()
+			-- 	Snacks.terminal(nil, { win = { position = "float" } })
+			-- end, { desc = "Terminal" })
+			--
+			-- vim.keymap.set("n", "<c-_>", function()
+			-- 	Snacks.terminal(nil, { win = { position = "float" } })
+			-- end, { desc = "wich_key_ignore" })
 
 			vim.keymap.set("n", "<leader>lg", function()
 				Snacks.lazygit.open()

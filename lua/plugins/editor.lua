@@ -106,7 +106,7 @@ return {
 			require("nvim-ts-autotag").setup({
 				opts = {
 					enable_close = true,
-					enable_rename = true,
+					enable_rename = false,
 					enable_close_on_slash = false,
 				},
 			})
@@ -126,5 +126,24 @@ return {
 		config = function()
 			vim.keymap.set("n", "<leader>uu", vim.cmd.UndotreeToggle, { desc = "Toggle undotree" })
 		end,
+	},
+
+	{
+		"s-montigny-desautels/oklch-color-picker.nvim",
+		event = "VeryLazy",
+		branch = "fix/invalid-buffer-error",
+		version = "*",
+		keys = {
+			-- One handed keymap recommended, you will be using the mouse
+			{
+				"<leader>v",
+				function()
+					require("oklch-color-picker").pick_under_cursor()
+				end,
+				desc = "Color pick under cursor",
+			},
+		},
+		---@type oklch.Opts
+		opts = {},
 	},
 }

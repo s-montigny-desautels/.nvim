@@ -62,8 +62,9 @@ set("n", "[d", vim.diagnostic.goto_prev)
 
 set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
--- vim.keymap.set("n", "<c-/>", terminal.open, { desc = "Terminal" })
--- vim.keymap.set("n", "<c-_>", terminal.open, { desc = "wich_key_ignore" })
+local terminal = require("config.terminal")
+vim.keymap.set("n", "<c-/>", terminal.open, { desc = "Terminal" })
+vim.keymap.set("n", "<c-_>", terminal.open, { desc = "wich_key_ignore" })
 
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
 vim.keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })

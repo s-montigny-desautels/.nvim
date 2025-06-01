@@ -68,4 +68,13 @@ function M.foldexpr()
 	return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or "0"
 end
 
+function M.get_pkg_path(pkg, path)
+	pcall(require, "mason")
+	local root = vim.env.MASON
+
+	path = path or ""
+
+	return root .. "/packages/" .. pkg .. "/" .. path
+end
+
 return M

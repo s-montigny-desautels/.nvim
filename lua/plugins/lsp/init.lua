@@ -1,16 +1,17 @@
 local find_vue_path = function()
-	local registry = require("mason-registry")
+	local util = require("util")
 
-	return registry.get_package("vue-language-server"):get_install_path() .. "/node_modules/@vue/language-server"
+	return util.get_pkg_path("vue-language-server", "node_modules/@vue/language-server")
 end
 
 local function server_settings()
-	local lspconfig = require("lspconfig")
-	local git_root_dir = lspconfig.util.root_pattern(".git")
+	local nvim_lsp = require("lspconfig")
 	local ok, vue_language_server_path = pcall(find_vue_path)
 	if not ok then
 		vue_language_server_path = ""
 	end
+
+	print(nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"))
 
 	return {
 		gopls = {
@@ -60,14 +61,16 @@ local function server_settings()
 					experimental = {
 						classRegex = {
 							"tw`([^`]*)`",
+							{ "clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+							{ "cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+							{ "cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
 						},
 					},
 				},
 			},
 		},
 
-		volar = {
-			root_dir = git_root_dir,
+		vue_ls = {
 			init_options = {
 				vue = {
 					hybridMode = true,
@@ -85,8 +88,17 @@ local function server_settings()
 			},
 		},
 
+		denols = {
+			-- root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc", ".git"),
+			root_markers = { "deno.json", "deno.jsonc" },
+			workspace_required = true,
+			single_file_support = false,
+		},
+
 		vtsls = {
-			root_dir = git_root_dir,
+			root_markers = { "package.json" },
+			workspace_required = true,
+			single_file_support = false,
 			filetypes = {
 				"typescript",
 				"typescriptreact",
@@ -164,6 +176,12 @@ local function server_settings()
 				},
 			},
 		},
+
+		cssls = {
+			settings = {
+				css = { validate = false },
+			},
+		},
 	}
 end
 
@@ -203,14 +221,19 @@ return {
 		end,
 	},
 
+	{
+		"folke/lazydev.nvim",
+		ft = "lua",
+		opts = {},
+	},
+
 	-- LSP setup
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			{ "folke/neodev.nvim", opts = {} },
+			-- "WhoIsSethDaniel/mason-tool-installer.nvim",
 			"b0o/SchemaStore.nvim",
 			{
 				"nvim-flutter/flutter-tools.nvim",
@@ -224,53 +247,24 @@ return {
 				{ "<leader>c", group = "[C]ode" },
 			})
 
-			require("mason-lspconfig").setup()
-
 			local servers = server_settings()
 
-			local servers_to_install = vim.tbl_keys(servers)
+			require("mason-lspconfig").setup({
+				automatic_enable = true,
+			})
 
-			local ensure_installed = {
-				"stylua",
-				"lua_ls",
-				"tailwindcss-language-server",
-				"prettierd",
-				"black",
-				"goimports",
-				"gofumpt",
-			}
-
-			vim.list_extend(ensure_installed, servers_to_install)
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-			-- Setup all servers
-			local lspconfig = require("lspconfig")
-
-			local default_config = {
-				capabilities = require("blink.cmp").get_lsp_capabilities(),
+			vim.lsp.config("*", {
 				handlers = {
 					-- Silence the `No Information Available` message
 					["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 						silent = true,
 					}),
 				},
-			}
-
-			local setup_handlers = {
-				function(name)
-					lspconfig[name].setup(default_config)
-				end,
-			}
+			})
 
 			for name, config in pairs(servers) do
-				config = vim.tbl_deep_extend("force", {}, default_config, config)
-
-				setup_handlers[name] = function()
-					lspconfig[name].setup(config)
-				end
+				vim.lsp.config(name, config)
 			end
-
-			require("mason-lspconfig").setup_handlers(setup_handlers)
 
 			local handler = vim.lsp.handlers["textDocument/documentHighlight"]
 			vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
@@ -286,10 +280,6 @@ return {
 			vim.lsp.inlay_hint.enable(false)
 
 			require("plugins.lsp.bootstrap").setup()
-			-- vim.api.nvim_create_autocmd("LspAttach", {
-			-- 	callback = function(args)
-			-- 	end,
-			-- })
 		end,
 	},
 
@@ -297,6 +287,23 @@ return {
 	{
 		"stevearc/conform.nvim",
 		config = function()
+			---Return true if the buf as a LSP client with the given name attached.
+			---@param buf integer
+			---@param name string
+			---@return boolean
+			local function enableIfClient(buf, name)
+				local clients = vim.lsp.get_clients({ bufnr = buf })
+
+				for _, client in pairs(clients) do
+					print(client.name)
+					if client.name == name then
+						return true
+					end
+				end
+
+				return false
+			end
+
 			require("conform").setup({
 				formatters_by_ft = {
 					lua = { "stylua" },
@@ -307,7 +314,7 @@ return {
 					python = { "black" },
 					javascript = { "prettierd" },
 					javascriptreact = { "prettierd" },
-					typescript = { "prettierd" },
+					typescript = { "deno_fmt", "prettierd" },
 					typescriptreact = { "prettierd" },
 					vue = { "prettierd" },
 					css = { "prettierd" },
@@ -322,6 +329,18 @@ return {
 					graphql = { "prettierd" },
 					handlebars = { "prettierd" },
 				},
+				formatters = {
+					deno_fmt = {
+						condition = function(self, ctx)
+							return enableIfClient(ctx.buf, "denols")
+						end,
+					},
+					prettierd = {
+						condition = function(self, ctx)
+							return enableIfClient(ctx.buf, "vtsls")
+						end,
+					},
+				},
 			})
 
 			vim.keymap.set("n", "<leader>cf", function()
@@ -333,7 +352,7 @@ return {
 		"linux-cultist/venv-selector.nvim",
 		branch = "regexp",
 		config = function()
-			require("venv-selector").setup()
+			require("venv-selector").setup({})
 			vim.keymap.set("n", "<leader>cv", "<cmd>:VenvSelect<CR>", { desc = "Seelct VirtualEnv" })
 		end,
 	},

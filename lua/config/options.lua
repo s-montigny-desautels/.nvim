@@ -14,7 +14,7 @@ opt.tabstop = 4
 opt.softtabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = false
-opt.smartindent = false
+opt.smartindent = true
 
 opt.wrap = false
 opt.linebreak = true

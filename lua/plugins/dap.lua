@@ -1,7 +1,6 @@
 local function setup_node()
 	local dap = require("dap")
-
-	local registry = require("mason-registry")
+	local util = require("util")
 
 	if not dap.adapters["pwa-node"] then
 		require("dap").adapters["pwa-node"] = {
@@ -11,7 +10,7 @@ local function setup_node()
 			executable = {
 				command = "node",
 				args = {
-					registry.get_package("js-debug-adapter"):get_install_path() .. "/js-debug/src/dapDebugServer.js",
+					util.get_pkg_path("js-debug-adapter", "js-debug/src/dapDebugServer.js"),
 					"${port}",
 				},
 			},
@@ -97,7 +96,6 @@ return {
 			local function map(key, fn, desc)
 				vim.keymap.set("n", key, fn, { desc = desc })
 			end
-
 
 			require("which-key").add({
 				{ "<leader>d", group = "[D]ebug" },
