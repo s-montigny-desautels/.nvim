@@ -118,12 +118,12 @@ return {
 		end,
 	},
 
-	-- Enable to show fancy rename prompt
-	{
-		"stevearc/dressing.nvim",
-		enabled = true,
-		config = function()
-			require("dressing").setup({})
-		end,
-	},
+	-- -- Enable to show fancy rename prompt
+	-- {
+	-- 	"stevearc/dressing.nvim",
+	-- 	enabled = true,
+	-- 	config = function()
+	-- 		require("dressing").setup({})
+	-- 	end,
+	-- },
 }

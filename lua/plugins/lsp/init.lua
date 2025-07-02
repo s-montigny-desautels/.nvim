@@ -1,17 +1,6 @@
-local find_vue_path = function()
-	local util = require("util")
-
-	return util.get_pkg_path("vue-language-server", "node_modules/@vue/language-server")
-end
-
 local function server_settings()
-	local nvim_lsp = require("lspconfig")
-	local ok, vue_language_server_path = pcall(find_vue_path)
-	if not ok then
-		vue_language_server_path = ""
-	end
-
-	print(nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"))
+	local vue_language_server_path = vim.fn.stdpath("data")
+		.. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 
 	return {
 		gopls = {
@@ -71,11 +60,46 @@ local function server_settings()
 		},
 
 		vue_ls = {
-			init_options = {
-				vue = {
-					hybridMode = true,
-				},
-			},
+			on_init = function(client)
+				client.handlers["tsserver/request"] = function(_, result, context)
+					local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = "vtsls" })
+					if #clients == 0 then
+						vim.notify(
+							"Could not found `vtsls` lsp client, vue_lsp would not work without it.",
+							vim.log.levels.ERROR
+						)
+						return
+					end
+
+					local ts_client = clients[1]
+
+					local param = unpack(result)
+					local id, command, payload = unpack(param)
+					ts_client:exec_cmd({
+						command = "typescript.tsserverRequest",
+						arguments = {
+							command,
+							payload,
+						},
+					}, { bufnr = context.bufnr }, function(err, res)
+						if err then
+							vim.notify("vtsls error: " .. vim.inspect(err), vim.log.levels.ERROR)
+							return
+						end
+						if not res or not res.body then
+							vim.notify(("vtsls returned no data for %s"):format(command), vim.log.levels.WARN)
+							return
+						end
+
+						client:notify("tsserver/response", { { id, res.body } })
+					end)
+				end
+			end,
+			-- init_options = {
+			-- 	vue = {
+			-- 		hybridMode = true,
+			-- 	},
+			-- },
 			settings = {
 				vue = {
 					complete = {
@@ -97,6 +121,16 @@ local function server_settings()
 
 		vtsls = {
 			root_markers = { "package.json" },
+			-- init_options = {
+			-- 	plugins = {
+			-- 		{
+			-- 			name = "@vue/typescript-plugin",
+			-- 			location = vue_language_server_path,
+			-- 			languages = { "vue" },
+			-- 			configNamespace = "typescript",
+			-- 		},
+			-- 	},
+			-- },
 			workspace_required = true,
 			single_file_support = false,
 			filetypes = {
@@ -194,19 +228,19 @@ return {
 		end,
 	},
 
-	-- LSP task progress
-	{
-		"j-hui/fidget.nvim",
-		config = function()
-			require("fidget").setup({
-				notification = {
-					window = {
-						winblend = 0,
-					},
-				},
-			})
-		end,
-	},
+	-- -- LSP task progress
+	-- {
+	-- 	"j-hui/fidget.nvim",
+	-- 	config = function()
+	-- 		require("fidget").setup({
+	-- 			notification = {
+	-- 				window = {
+	-- 					winblend = 0,
+	-- 				},
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 
 	{
 		"williamboman/mason.nvim",
@@ -224,6 +258,11 @@ return {
 	{
 		"folke/lazydev.nvim",
 		ft = "lua",
+		opts = {},
+	},
+
+	{
+		"artemave/workspace-diagnostics.nvim",
 		opts = {},
 	},
 
@@ -245,6 +284,7 @@ return {
 		config = function()
 			require("which-key").add({
 				{ "<leader>c", group = "[C]ode" },
+				{ "<leader>cl", group = "[C]ode [L]sp" },
 			})
 
 			local servers = server_settings()
@@ -289,15 +329,16 @@ return {
 		config = function()
 			---Return true if the buf as a LSP client with the given name attached.
 			---@param buf integer
-			---@param name string
+			---@param clientsName string[]
 			---@return boolean
-			local function enableIfClient(buf, name)
+			local function enableIfClients(buf, clientsName)
 				local clients = vim.lsp.get_clients({ bufnr = buf })
 
 				for _, client in pairs(clients) do
-					print(client.name)
-					if client.name == name then
-						return true
+					for _, name in pairs(clientsName) do
+						if client.name == name then
+							return true
+						end
 					end
 				end
 
@@ -317,6 +358,7 @@ return {
 					typescript = { "deno_fmt", "prettierd" },
 					typescriptreact = { "prettierd" },
 					vue = { "prettierd" },
+					astro = { "prettierd" },
 					css = { "prettierd" },
 					scss = { "prettierd" },
 					less = { "prettierd" },
@@ -332,12 +374,12 @@ return {
 				formatters = {
 					deno_fmt = {
 						condition = function(self, ctx)
-							return enableIfClient(ctx.buf, "denols")
+							return enableIfClients(ctx.buf, { "denols" })
 						end,
 					},
 					prettierd = {
 						condition = function(self, ctx)
-							return enableIfClient(ctx.buf, "vtsls")
+							return enableIfClients(ctx.buf, { "vtsls", "astro" })
 						end,
 					},
 				},

@@ -48,6 +48,7 @@ return {
 		end,
 	},
 
+
 	{
 		"shortcuts/no-neck-pain.nvim",
 		version = "*",
@@ -128,22 +129,23 @@ return {
 		end,
 	},
 
-	{
-		"s-montigny-desautels/oklch-color-picker.nvim",
-		event = "VeryLazy",
-		branch = "fix/invalid-buffer-error",
-		version = "*",
-		keys = {
-			-- One handed keymap recommended, you will be using the mouse
-			{
-				"<leader>v",
-				function()
-					require("oklch-color-picker").pick_under_cursor()
-				end,
-				desc = "Color pick under cursor",
-			},
-		},
-		---@type oklch.Opts
-		opts = {},
-	},
+	-- TODO: Error when resuming session
+	-- {
+	-- 	"s-montigny-desautels/oklch-color-picker.nvim",
+	-- 	event = "VeryLazy",
+	-- 	branch = "fix/invalid-buffer-error",
+	-- 	version = "*",
+	-- 	keys = {
+	-- 		-- One handed keymap recommended, you will be using the mouse
+	-- 		{
+	-- 			"<leader>v",
+	-- 			function()
+	-- 				require("oklch-color-picker").pick_under_cursor()
+	-- 			end,
+	-- 			desc = "Color pick under cursor",
+	-- 		},
+	-- 	},
+	-- 	---@type oklch.Opts
+	-- 	opts = {},
+	-- },
 }

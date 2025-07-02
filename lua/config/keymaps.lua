@@ -12,8 +12,12 @@ set("n", "<leader>uw", "<cmd>set wrap!<CR>", { desc = "Toggle line wrap" })
 set("v", "J", ":m '>+1<CR>gv=gv")
 set("v", "K", ":m '<-2<CR>gv=gv")
 
-set("n", "]d", vim.diagnostic.goto_next)
-set("n", "[d", vim.diagnostic.goto_prev)
+set("n", "]d", function()
+	vim.diagnostic.jump({ count = 1, float = true })
+end)
+set("n", "[d", function()
+	vim.diagnostic.jump({ count = -1, float = true })
+end)
 
 set("n", "<M-,>", "<c-w>5<", { desc = "Increase width" })
 set("n", "<M-.>", "<c-w>5>", { desc = "Decrease width" })
@@ -55,10 +59,6 @@ set("v", ">", ">gv")
 
 -- lazy
 set("n", "<leader>ll", "<cmd>Lazy<cr>", { desc = "[L]azy.nvim" })
-
--- Diagnostic
-set("n", "]d", vim.diagnostic.goto_next)
-set("n", "[d", vim.diagnostic.goto_prev)
 
 set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 

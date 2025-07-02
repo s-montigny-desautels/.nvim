@@ -25,4 +25,15 @@ require("lazy").setup({
 		backdrop = 100,
 		border = "rounded",
 	},
+	performance = {
+		rtp = {
+			disabled_plugins = {
+				"gzip",
+				"tarPlugin",
+				"tohtml",
+				"tutor",
+				"zipPlugin",
+			},
+		},
+	},
 })

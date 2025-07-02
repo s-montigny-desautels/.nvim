@@ -25,6 +25,8 @@ function M.setup()
 	M.on_attach(function(client, buffer)
 		M._check_methods(client, buffer)
 		M._set_keymap(buffer)
+		-- Seem to crash...
+		-- require("workspace-diagnostics").populate_workspace_diagnostics(client, buffer)
 	end)
 
 	M.on_dynamic_capability(M._check_methods)
@@ -103,18 +105,11 @@ function M._set_keymap(buf)
 		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
 	end
 
-	local fzf = require("fzf-lua")
-
-	map("gd", function()
-		fzf.lsp_definitions()
-	end, "[G]oto [D]efinition")
-
-	map("gr", fzf.lsp_references, "[G]oto [R]eferences")
-	map("gI", fzf.lsp_implementations, "[G]oto [I]mplementation")
-
 	map("K", vim.lsp.buf.hover, "Hover Documentation")
 
-	map("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
+	map("<leader>cr", function()
+		vim.lsp.buf.rename()
+	end, "[C]ode [R]ename")
 
 	map("<leader>ca", function()
 		vim.lsp.buf.code_action({
@@ -126,6 +121,19 @@ function M._set_keymap(buf)
 			},
 		})
 	end, "[C]ode [A]ction")
+
+	map("<leader>cli", function()
+		require("snacks").picker.lsp_config()
+	end, "[L]sp [I]nfo")
+
+	map("<leader>clr", function()
+		local bufnr = vim.api.nvim_get_current_buf()
+		local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+		for _, client in pairs(clients) do
+			vim.cmd.LspRestart(client.name)
+		end
+	end, "[L]sp [R]estart")
 end
 
 function M.setup_codelens()
