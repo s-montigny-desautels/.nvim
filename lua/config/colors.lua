@@ -3,7 +3,7 @@ local job = require("plenary.job")
 local setTheme = function(val)
 	vim.schedule(function()
 		if val == "1" then
-			vim.cmd("colorscheme kanagawa-wave")
+			vim.cmd("colorscheme catppuccin-mocha")
 		else
 			vim.cmd("colorscheme catppuccin-latte")
 		end

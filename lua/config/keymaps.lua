@@ -26,6 +26,10 @@ set("n", "<M-s>", "<C-W>-", { desc = "Decrease height" })
 
 set("n", "<leader>sq", "<cmd>qa<CR>", { desc = "[S]ession [Q]uit" })
 
+set("x", "<leader>p", [["_dP]])
+set({ "n", "v" }, "<leader>y", [["+y]])
+set("n", "<leader>Y", [["+Y]])
+
 set("n", "<leader>ud", function()
 	vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { desc = "Toggle Diagnostic" })
@@ -62,13 +66,13 @@ set("n", "<leader>ll", "<cmd>Lazy<cr>", { desc = "[L]azy.nvim" })
 
 set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
-local terminal = require("config.terminal")
-vim.keymap.set("n", "<c-/>", terminal.open, { desc = "Terminal" })
-vim.keymap.set("n", "<c-_>", terminal.open, { desc = "wich_key_ignore" })
+-- local terminal = require("config.terminal")
+-- vim.keymap.set("n", "<c-/>", terminal.open, { desc = "Terminal" })
+-- vim.keymap.set("n", "<c-_>", terminal.open, { desc = "wich_key_ignore" })
 
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
-vim.keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
-vim.keymap.set("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
+-- vim.keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
+-- vim.keymap.set("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
 -- vim.keymap.set("n", "<leader>lg", require("config.lazygit").open, { desc = "[L]azy[G]it" })
 vim.keymap.set("n", "<leader>ld", require("config.lazydocker").open, { desc = "[L]azy[D]ocker" })

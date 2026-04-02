@@ -89,7 +89,7 @@ function M._check_methods(client, buffer)
 	for method, clients in pairs(M._supports_method) do
 		clients[client] = clients[client] or {}
 		if not clients[client][buffer] then
-			if client.supports_method and client.supports_method(method, { bufnr = buffer }) then
+			if client:supports_method(method, { bufnr = buffer }) then
 				clients[client][buffer] = true
 				vim.api.nvim_exec_autocmds("User", {
 					pattern = "LspSupportsMethod",
@@ -101,26 +101,33 @@ function M._check_methods(client, buffer)
 end
 
 function M._set_keymap(buf)
-	local function map(keys, func, desc)
-		vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
+	local function map(keys, func, desc, mode)
+		if mode == nil then
+			mode = "n"
+		end
+		vim.keymap.set(mode, keys, func, { buffer = buf, desc = "LSP: " .. desc })
 	end
 
-	map("K", vim.lsp.buf.hover, "Hover Documentation")
+	map("K", function()
+		vim.lsp.buf.hover({ silent = true })
+	end, "Hover Documentation")
 
 	map("<leader>cr", function()
 		vim.lsp.buf.rename()
 	end, "[C]ode [R]ename")
 
+	map("<leader>cA", function()
+		vim.lsp.buf.code_action()
+	end, "[C]ode [A]ction line or selection", { "n", "x" })
+
 	map("<leader>ca", function()
 		vim.lsp.buf.code_action({
 			context = {
-				only = {
-					"source",
-				},
+				only = { "source" },
 				diagnostics = {},
 			},
 		})
-	end, "[C]ode [A]ction")
+	end, "[C]ode [A]ction file", { "n", "x" })
 
 	map("<leader>cli", function()
 		require("snacks").picker.lsp_config()
@@ -134,6 +141,16 @@ function M._set_keymap(buf)
 			vim.cmd.LspRestart(client.name)
 		end
 	end, "[L]sp [R]estart")
+
+	map("<leader>dtl", function()
+		local bufnr = vim.api.nvim_get_current_buf()
+		local clients = vim.lsp.get_clients({ bufnr = bufnr })
+		for _, client in pairs(clients) do
+			if client.name == "vtsls" then
+				vim.lsp.buf_request_sync(buf, "workspace/executeCommand", { command = "typescript.openTsServerLog" })
+			end
+		end
+	end, "Debug ts lsp")
 end
 
 function M.setup_codelens()
@@ -145,11 +162,18 @@ function M.setup_codelens()
 			local result = vim.lsp.buf_request_sync(buf, "textDocument/codeLens", params, 3000)
 
 			local codeLens = {}
+			local empty = true
 
 			for _, res in pairs(result or {}) do
 				for _, r in pairs(res.result or {}) do
 					table.insert(codeLens, r)
+					empty = false
 				end
+			end
+
+			if empty then
+				vim.notify("No codelens available", "info")
+				return
 			end
 
 			vim.ui.select(codeLens, {

@@ -2,6 +2,7 @@ return {
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		enabled = true,
 		config = function()
 			require("lualine").setup({
 				options = {
@@ -76,6 +77,7 @@ return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
+		enabled = true,
 		config = function()
 			require("ibl").setup({
 				indent = {
@@ -117,13 +119,4 @@ return {
 			})
 		end,
 	},
-
-	-- -- Enable to show fancy rename prompt
-	-- {
-	-- 	"stevearc/dressing.nvim",
-	-- 	enabled = true,
-	-- 	config = function()
-	-- 		require("dressing").setup({})
-	-- 	end,
-	-- },
 }

@@ -1,8 +1,5 @@
 return {
 	{
-		"tpope/vim-sleuth",
-	},
-	{
 		"folke/todo-comments.nvim",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		config = function()
@@ -47,7 +44,6 @@ return {
 			end, "Next Trouble/Quickfix Item")
 		end,
 	},
-
 
 	{
 		"shortcuts/no-neck-pain.nvim",
@@ -128,24 +124,4 @@ return {
 			vim.keymap.set("n", "<leader>uu", vim.cmd.UndotreeToggle, { desc = "Toggle undotree" })
 		end,
 	},
-
-	-- TODO: Error when resuming session
-	-- {
-	-- 	"s-montigny-desautels/oklch-color-picker.nvim",
-	-- 	event = "VeryLazy",
-	-- 	branch = "fix/invalid-buffer-error",
-	-- 	version = "*",
-	-- 	keys = {
-	-- 		-- One handed keymap recommended, you will be using the mouse
-	-- 		{
-	-- 			"<leader>v",
-	-- 			function()
-	-- 				require("oklch-color-picker").pick_under_cursor()
-	-- 			end,
-	-- 			desc = "Color pick under cursor",
-	-- 		},
-	-- 	},
-	-- 	---@type oklch.Opts
-	-- 	opts = {},
-	-- },
 }

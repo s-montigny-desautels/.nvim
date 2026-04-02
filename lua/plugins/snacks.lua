@@ -36,6 +36,9 @@ return {
 			Snacks.setup({
 				bigfile = { enabled = true },
 				dashboard = { enabled = false },
+				image = {
+					enabled = true,
+				},
 				notifier = {
 					enabled = true,
 					timeout = 3000,
@@ -56,7 +59,7 @@ return {
 					},
 					matcher = {
 						fuzzy = true,
-						smartcase = true,
+						smartcase = false,
 						ignorecase = true,
 						sort_empty = false,
 						filename_bonus = true,
@@ -68,7 +71,7 @@ return {
 					sort = {
 						fields = { "score:desc", "#test", "idx" },
 					},
-					ui_select = true,
+					-- ui_select = true,
 					toggles = {
 						follow = "f",
 						hidden = "h",
@@ -118,15 +121,11 @@ return {
 
 			-- Finder
 			map("<C-p>", function()
-				if require("util").is_in_git() then
-					Snacks.picker.git_files({
-						-- List all tracked files, untracked files, ignore all in .gitignore and ignore deleted files
-						-- cmd = 'git ls-files -co --exclude-standard | grep -vE "^$(git ls-files -d | paste -sd "|" -)$"',
-						untracked = true,
-					})
-				else
-					Snacks.picker.files({ cwd = require("util").root_dir() })
-				end
+				Snacks.picker.smart({
+					filter = {
+						cwd = true,
+					},
+				})
 			end, { desc = "Search Project Files" })
 
 			map("<leader>pf", function()
@@ -136,7 +135,7 @@ return {
 				Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
 			end, { desc = "Search Config File" })
 
-			map("<leader>pw", Snacks.picker.grep_word, { desc = "Search by Grep", mode = { "n", "x" } })
+			map("<leader>pw", Snacks.picker.grep_word, { desc = "Search by Grep", mode = { "n" } })
 			map("<leader>pg", Snacks.picker.grep, { desc = "Search by Grep" })
 			map("<leader>pr", Snacks.picker.resume, { desc = "Resume" })
 			map("<leader>:", Snacks.picker.command_history, { desc = "Command History" })
@@ -156,6 +155,9 @@ return {
 			map("gD", Snacks.picker.lsp_declarations, { desc = "Goto Declaration" })
 			map("gr", Snacks.picker.lsp_references, { desc = "Goto References" })
 			map("gI", Snacks.picker.lsp_implementations, { desc = "Goto Implementation" })
+
+			-- Notification
+			map("<leader>nh", Snacks.notifier.show_history, { desc = "Show message history" })
 		end,
 	},
 

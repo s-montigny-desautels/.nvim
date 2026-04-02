@@ -60,56 +60,17 @@ local function server_settings()
 		},
 
 		vue_ls = {
-			on_init = function(client)
-				client.handlers["tsserver/request"] = function(_, result, context)
-					local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = "vtsls" })
-					if #clients == 0 then
-						vim.notify(
-							"Could not found `vtsls` lsp client, vue_lsp would not work without it.",
-							vim.log.levels.ERROR
-						)
-						return
-					end
-
-					local ts_client = clients[1]
-
-					local param = unpack(result)
-					local id, command, payload = unpack(param)
-					ts_client:exec_cmd({
-						command = "typescript.tsserverRequest",
-						arguments = {
-							command,
-							payload,
-						},
-					}, { bufnr = context.bufnr }, function(err, res)
-						if err then
-							vim.notify("vtsls error: " .. vim.inspect(err), vim.log.levels.ERROR)
-							return
-						end
-						if not res or not res.body then
-							vim.notify(("vtsls returned no data for %s"):format(command), vim.log.levels.WARN)
-							return
-						end
-
-						client:notify("tsserver/response", { { id, res.body } })
-					end)
-				end
-			end,
-			-- init_options = {
-			-- 	vue = {
-			-- 		hybridMode = true,
-			-- 	},
-			-- },
 			settings = {
 				vue = {
-					complete = {
-						casing = {
-							props = "camel",
-							tags = "pascal",
-						},
+					suggest = {
+						propNameCasing = "alwaysCamelCase",
+						componentNameCasing = "alwaysPascalCase",
 					},
 				},
 			},
+			on_attach = function(client)
+				client.server_capabilities.semanticTokensProvider.full = true
+			end,
 		},
 
 		denols = {
@@ -178,8 +139,18 @@ local function server_settings()
 						propertyDeclarationTypes = { enabled = true },
 						variableTypes = { enabled = false },
 					},
+					-- tsserver = {
+					-- 	log = "verbose",
+					-- },
 				},
 			},
+			on_attach = function(client)
+				if vim.bo.filetype == "vue" then
+					client.server_capabilities.semanticTokensProvider.full = false
+				else
+					client.server_capabilities.semanticTokensProvider.full = true
+				end
+			end,
 		},
 
 		jsonls = {
@@ -271,8 +242,6 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-			-- "WhoIsSethDaniel/mason-tool-installer.nvim",
 			"b0o/SchemaStore.nvim",
 			{
 				"nvim-flutter/flutter-tools.nvim",
@@ -289,22 +258,38 @@ return {
 
 			local servers = server_settings()
 
-			require("mason-lspconfig").setup({
-				automatic_enable = true,
-			})
-
-			vim.lsp.config("*", {
-				handlers = {
-					-- Silence the `No Information Available` message
-					["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-						silent = true,
-					}),
-				},
-			})
-
 			for name, config in pairs(servers) do
 				vim.lsp.config(name, config)
 			end
+
+			local registry = require("mason-registry")
+
+			local function enable(name)
+				local package_mapping = {}
+				for _, spec in ipairs(registry.get_all_package_specs()) do
+					local lspconfig = vim.tbl_get(spec, "neovim", "lspconfig")
+					if lspconfig then
+						package_mapping[spec.name] = lspconfig
+					end
+				end
+
+				local lspconfig_name = package_mapping[name]
+				if not lspconfig_name then
+					lspconfig_name = name
+				end
+
+				vim.lsp.enable(lspconfig_name)
+			end
+
+			for _, name in pairs(registry.get_installed_package_names()) do
+				enable(name)
+			end
+
+			registry:on("package:install:success", function(pkg)
+				vim.schedule(function()
+					enable(pkg.name)
+				end)
+			end)
 
 			local handler = vim.lsp.handlers["textDocument/documentHighlight"]
 			vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
@@ -351,7 +336,7 @@ return {
 					sql = { "pg_format" },
 					templ = { "templ" },
 					c = { "clang-format" },
-					go = { "goimports", "golines", "gofumpt" },
+					go = { "goimports", "gofumpt" },
 					python = { "black" },
 					javascript = { "prettierd" },
 					javascriptreact = { "prettierd" },
@@ -372,6 +357,11 @@ return {
 					handlebars = { "prettierd" },
 				},
 				formatters = {
+					pg_format = {
+						append_args = function(self, ctx)
+							return { "-t", "--no-space-function", "--keep-newline", "--comma-break", "--comma-start" }
+						end,
+					},
 					deno_fmt = {
 						condition = function(self, ctx)
 							return enableIfClients(ctx.buf, { "denols" })
@@ -379,7 +369,7 @@ return {
 					},
 					prettierd = {
 						condition = function(self, ctx)
-							return enableIfClients(ctx.buf, { "vtsls", "astro" })
+							return enableIfClients(ctx.buf, { "vtsls", "astro", "jsonls", "marksman" })
 						end,
 					},
 				},
@@ -392,7 +382,7 @@ return {
 	},
 	{
 		"linux-cultist/venv-selector.nvim",
-		branch = "regexp",
+		branch = "main",
 		config = function()
 			require("venv-selector").setup({})
 			vim.keymap.set("n", "<leader>cv", "<cmd>:VenvSelect<CR>", { desc = "Seelct VirtualEnv" })

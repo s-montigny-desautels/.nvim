@@ -2,7 +2,7 @@ local opt = vim.opt
 
 vim.g.root_spec = { { ".git", "lua" }, "cwd" }
 
-opt.clipboard = "unnamedplus"
+opt.clipboard = ""
 opt.confirm = true
 
 opt.number = true
@@ -56,9 +56,10 @@ opt.shortmess:append({ W = true, c = true, C = true })
 
 opt.smoothscroll = true
 opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.require'util'.foldexpr()"
+-- opt.foldexpr = "v:lua.require'util'.foldexpr()"
 opt.foldtext = ""
 opt.foldlevel = 99
+opt.winborder = "rounded"
 
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)

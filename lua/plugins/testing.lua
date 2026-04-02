@@ -7,6 +7,7 @@ return {
 			-- Lang
 			"nvim-neotest/neotest-go",
 			"marilari88/neotest-vitest",
+			"nvim-neotest/neotest-jest",
 		},
 		config = function()
 			require("which-key").add({
@@ -18,7 +19,7 @@ return {
 				status = { enabled = true, virtual_text = true },
 				output = { enabled = true, open_on_run = false },
 				quickfix = {
-					enabled = true,
+					enabled = false,
 					open = function()
 						require("trouble").open({ mode = "quickfix", focus = false })
 					end,
@@ -26,6 +27,7 @@ return {
 				adapters = {
 					require("neotest-go"),
 					require("neotest-vitest"),
+					require("neotest-jest"),
 				},
 			})
 
@@ -46,7 +48,7 @@ return {
 			end, "Run Nearest")
 
 			map("<leader>to", function()
-				neotest.output.open({ enter = true, auto_close = true })
+				neotest.output.open({ enter = true, auto_close = true, short = false })
 			end, "Show Output")
 
 			map("<leader>ts", function()

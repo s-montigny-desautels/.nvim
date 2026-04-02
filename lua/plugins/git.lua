@@ -3,7 +3,7 @@ return {
 		"tpope/vim-fugitive",
 		config = function()
 			vim.keymap.set("n", "<leader>gD", "<cmd>Gvdiffsplit<CR>", { desc = "Git Diff File" })
-			vim.keymap.set("n", "<leader>gg", "<cmd>0G<CR>", { desc = "Git fugitive" })
+			-- vim.keymap.set("n", "<leader>gg", "<cmd>0G<CR>", { desc = "Git fugitive" })
 			vim.keymap.set("n", "<leader>gp", "<cmd>Git push<CR>", { desc = "Git push" })
 			vim.keymap.set(
 				"n",
@@ -43,10 +43,12 @@ return {
 					end
 
 					map("n", "]h", function()
+						---@diagnostic disable-next-line: param-type-mismatch
 						gs.nav_hunk("next")
 					end, "Next Hunk")
 
 					map("n", "[h", function()
+						---@diagnostic disable-next-line: param-type-mismatch
 						gs.nav_hunk("prev")
 					end, "Prev Hunk")
 
@@ -60,4 +62,14 @@ return {
 			})
 		end,
 	},
+	"NeogitOrg/neogit",
+	dependencies = {
+		"sindrets/diffview.nvim",
+	},
+	config = function()
+		local neogit = require("neogit")
+		neogit.setup({})
+
+		vim.keymap.set("n", "<leader>gg", neogit.open, { desc = "Open neogit UI" })
+	end,
 }
