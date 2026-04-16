@@ -1,12 +1,13 @@
 return {
 	{
 		"stevearc/oil.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
+		-- dependencies = { "nvim-tree/nvim-web-devicons" },
 		lazy = false,
+		enabled = true,
 		config = function()
 			local detail = false
 			require("oil").setup({
-				columns = { "icon" },
+				columns = {},
 				keymaps = {
 					["<C-h>"] = false,
 					["<C-l>"] = false,
@@ -18,9 +19,9 @@ return {
 						callback = function()
 							detail = not detail
 							if detail then
-								require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
+								require("oil").set_columns({ "permissions", "size", "mtime" })
 							else
-								require("oil").set_columns({ "icon" })
+								require("oil").set_columns({})
 							end
 						end,
 					},

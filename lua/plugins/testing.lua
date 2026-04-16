@@ -10,9 +10,9 @@ return {
 			"nvim-neotest/neotest-jest",
 		},
 		config = function()
-			require("which-key").add({
-				{ "<leader>t", group = "[T]est" },
-			})
+			-- require("which-key").add({
+			-- 	{ "<leader>t", group = "[T]est" },
+			-- })
 
 			local neotest = require("neotest")
 			neotest.setup({

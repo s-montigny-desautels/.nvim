@@ -97,9 +97,9 @@ return {
 				vim.keymap.set("n", key, fn, { desc = desc })
 			end
 
-			require("which-key").add({
-				{ "<leader>d", group = "[D]ebug" },
-			})
+			-- require("which-key").add({
+			-- 	{ "<leader>d", group = "[D]ebug" },
+			-- })
 
 			map("<leader>du", function()
 				dapui.toggle({})

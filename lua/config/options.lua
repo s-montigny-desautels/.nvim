@@ -29,6 +29,7 @@ opt.smartcase = true
 opt.updatetime = 250
 opt.timeoutlen = 300
 opt.conceallevel = 2
+opt.showcmd = false -- disable partial command display in the bottom right
 
 opt.splitright = true
 opt.splitbelow = true
@@ -52,14 +53,14 @@ opt.undofile = true
 
 vim.g.autoformat = false
 
-opt.shortmess:append({ W = true, c = true, C = true })
+opt.shortmess:append({ W = true, c = true, C = true, s = true })
 
 opt.smoothscroll = true
 opt.foldmethod = "expr"
 -- opt.foldexpr = "v:lua.require'util'.foldexpr()"
 opt.foldtext = ""
 opt.foldlevel = 99
-opt.winborder = "rounded"
+opt.winborder = "single"
 
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
@@ -74,3 +75,8 @@ vim.filetype.add({
 		bru = "bruno",
 	},
 })
+
+
+-- vim.opt.laststatus = 3
+-- vim.opt.statusline = "%{get(b:,'gitsigns_head','')} | %f %m %r %= %d"
+-- vim.opt.statusline = " %f %m %= %l:%c"

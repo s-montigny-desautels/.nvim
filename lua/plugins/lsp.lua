@@ -191,28 +191,6 @@ local function server_settings()
 end
 
 return {
-	-- Better LSP rename
-	{
-		"smjonas/inc-rename.nvim",
-		config = function()
-			require("inc_rename").setup({})
-		end,
-	},
-
-	-- -- LSP task progress
-	-- {
-	-- 	"j-hui/fidget.nvim",
-	-- 	config = function()
-	-- 		require("fidget").setup({
-	-- 			notification = {
-	-- 				window = {
-	-- 					winblend = 0,
-	-- 				},
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
-
 	{
 		"williamboman/mason.nvim",
 		config = function()
@@ -232,29 +210,18 @@ return {
 		opts = {},
 	},
 
-	{
-		"artemave/workspace-diagnostics.nvim",
-		opts = {},
-	},
-
 	-- LSP setup
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"williamboman/mason.nvim",
 			"b0o/SchemaStore.nvim",
-			{
-				"nvim-flutter/flutter-tools.nvim",
-				config = function()
-					require("flutter-tools").setup({})
-				end,
-			},
 		},
 		config = function()
-			require("which-key").add({
-				{ "<leader>c", group = "[C]ode" },
-				{ "<leader>cl", group = "[C]ode [L]sp" },
-			})
+			-- require("which-key").add({
+			-- 	{ "<leader>c", group = "[C]ode" },
+			-- 	{ "<leader>cl", group = "[C]ode [L]sp" },
+			-- })
 
 			local servers = server_settings()
 
@@ -291,20 +258,93 @@ return {
 				end)
 			end)
 
-			local handler = vim.lsp.handlers["textDocument/documentHighlight"]
-			vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
-				if not vim.api.nvim_buf_is_loaded(ctx.bufnr) then
-					return
-				end
-
-				vim.lsp.buf.clear_references()
-				return handler(err, result, ctx, config)
-			end
-
 			-- I hate this.
 			vim.lsp.inlay_hint.enable(false)
 
-			require("plugins.lsp.bootstrap").setup()
+			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+				callback = function()
+					vim.lsp.buf.document_highlight()
+				end,
+			})
+
+			vim.api.nvim_create_autocmd({ "CursorMoved" }, {
+				callback = function()
+					vim.lsp.buf.clear_references()
+				end,
+			})
+
+			vim.api.nvim_create_autocmd("LspAttach", {
+				callback = function(args)
+					local buf = args.buf ---@type number
+
+					local function map(keys, func, desc, mode)
+						if mode == nil then
+							mode = "n"
+						end
+						vim.keymap.set(mode, keys, func, { buffer = buf, desc = "LSP: " .. desc })
+					end
+
+					map("K", function()
+						vim.lsp.buf.hover({ silent = true })
+					end, "Hover Documentation")
+
+					map("<leader>cr", function()
+						vim.lsp.buf.rename()
+					end, "[C]ode [R]ename")
+
+					map("<leader>cA", function()
+						vim.lsp.buf.code_action()
+					end, "[C]ode [A]ction line or selection", { "n", "x" })
+
+					map("<leader>ca", function()
+						vim.lsp.buf.code_action({
+							context = {
+								only = { "source" },
+								diagnostics = {},
+							},
+						})
+					end, "[C]ode [A]ction file", { "n", "x" })
+
+					map("<leader>clr", function()
+						vim.cmd("lsp restart")
+					end, "[L]sp [R]estart")
+
+					-- TODO This is not working, debug when needed again...
+					-- map("<leader>cc", function()
+					-- 	local params = {
+					-- 		textDocument = vim.lsp.util.make_text_document_params(buf),
+					-- 	}
+					-- 	local result = vim.lsp.buf_request_sync(buf, "textDocument/codeLens", params, 3000)
+					--
+					-- 	local codeLens = {}
+					-- 	local empty = true
+					--
+					-- 	for _, res in pairs(result or {}) do
+					-- 		for _, r in pairs(res.result or {}) do
+					-- 			table.insert(codeLens, r)
+					-- 			empty = false
+					-- 		end
+					-- 	end
+					--
+					-- 	if empty then
+					-- 		vim.notify("No codelens available", "info")
+					-- 		return
+					-- 	end
+					--
+					-- 	vim.ui.select(codeLens, {
+					-- 		prompt = "Select code lens",
+					-- 		format_item = function(item)
+					-- 			return item.command.title .. " (line " .. item.range.start.line .. ")"
+					-- 		end,
+					-- 	}, function(selected)
+					-- 		if not selected then
+					-- 			return
+					-- 		end
+					-- 		vim.lsp.buf_request_sync(buf, "workspace/executeCommand", selected.command, 3000)
+					-- 	end)
+					-- end, "Code Lens")
+				end,
+			})
 		end,
 	},
 
@@ -362,11 +402,6 @@ return {
 							return { "-t", "--no-space-function", "--keep-newline", "--comma-break", "--comma-start" }
 						end,
 					},
-					deno_fmt = {
-						condition = function(self, ctx)
-							return enableIfClients(ctx.buf, { "denols" })
-						end,
-					},
 					prettierd = {
 						condition = function(self, ctx)
 							return enableIfClients(ctx.buf, { "vtsls", "astro", "jsonls", "marksman" })
@@ -378,14 +413,6 @@ return {
 			vim.keymap.set("n", "<leader>cf", function()
 				require("conform").format({ async = true, lsp_fallback = true })
 			end, { desc = "LSP: " .. "[F]ormat buffer" })
-		end,
-	},
-	{
-		"linux-cultist/venv-selector.nvim",
-		branch = "main",
-		config = function()
-			require("venv-selector").setup({})
-			vim.keymap.set("n", "<leader>cv", "<cmd>:VenvSelect<CR>", { desc = "Seelct VirtualEnv" })
 		end,
 	},
 }

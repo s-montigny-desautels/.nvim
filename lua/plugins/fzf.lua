@@ -2,7 +2,6 @@ return {
 	{
 		"ibhagwan/fzf-lua",
 		enabled = false,
-		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			local fzf = require("fzf-lua")
 
@@ -45,9 +44,9 @@ return {
 				vim.keymap.set("n", keys, func, { desc = desc })
 			end
 
-			require("which-key").add({
-				{ "<leader>p", group = "[P]rompt" },
-			})
+			-- require("which-key").add({
+			-- 	{ "<leader>p", group = "[P]rompt" },
+			-- })
 
 			map("<leader>ph", fzf.helptags, "Search Help")
 			map("<leader>pk", fzf.keymaps, "Search Keymaps")

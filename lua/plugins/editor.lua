@@ -1,13 +1,13 @@
 return {
-	{
-		"folke/todo-comments.nvim",
-		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		config = function()
-			require("todo-comments").setup({
-				signs = false,
-			})
-		end,
-	},
+	-- {
+	-- 	"folke/todo-comments.nvim",
+	-- 	event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+	-- 	config = function()
+	-- 		require("todo-comments").setup({
+	-- 			signs = false,
+	-- 		})
+	-- 	end,
+	-- },
 	{
 		"folke/trouble.nvim",
 		config = function()
@@ -62,9 +62,9 @@ return {
 				},
 			})
 
-			require("which-key").add({
-				{ "<leader>z", group = "[Z]en Mode" },
-			})
+			-- require("which-key").add({
+			-- 	{ "<leader>z", group = "[Z]en Mode" },
+			-- })
 
 			vim.keymap.set("n", "<leader>zz", "<cmd>:NoNeckPain<CR>", { desc = "Toggle NoNeckPain (Zen Mode)" })
 		end,
@@ -78,9 +78,9 @@ return {
 				open_cmd = "noswapfile vnew",
 			})
 
-			require("which-key").add({
-				{ "<leader>r", group = "[R]ename" },
-			})
+			-- require("which-key").add({
+			-- 	{ "<leader>r", group = "[R]ename" },
+			-- })
 
 			vim.keymap.set("n", "<leader>rr", function()
 				require("spectre").toggle()
