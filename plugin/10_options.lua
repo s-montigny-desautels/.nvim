@@ -1,5 +1,10 @@
 local opt = vim.opt
 
+vim.g.mapleader = " "
+vim.g.maplocalleader = ","
+
+vim.opt.laststatus = 3
+
 vim.g.root_spec = { { ".git", "lua" }, "cwd" }
 
 opt.clipboard = ""
@@ -62,12 +67,12 @@ opt.foldtext = ""
 opt.foldlevel = 99
 opt.winborder = "single"
 
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-	opts = opts or {}
-	opts.border = "rounded"
-	return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
+-- local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+-- function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+--   opts = opts or {}
+--   opts.border = 'rounded'
+--   return orig_util_open_floating_preview(contents, syntax, opts, ...)
+-- end
 
 vim.filetype.add({
 	extension = {
@@ -76,7 +81,4 @@ vim.filetype.add({
 	},
 })
 
-
--- vim.opt.laststatus = 3
--- vim.opt.statusline = "%{get(b:,'gitsigns_head','')} | %f %m %r %= %d"
--- vim.opt.statusline = " %f %m %= %l:%c"
+require("vim._core.ui2").enable({ msg = { target = "cmd" } })

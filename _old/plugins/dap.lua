@@ -1,6 +1,6 @@
 local function setup_node()
 	local dap = require("dap")
-	local util = require("util")
+	local util = Config.util
 
 	if not dap.adapters["pwa-node"] then
 		require("dap").adapters["pwa-node"] = {
