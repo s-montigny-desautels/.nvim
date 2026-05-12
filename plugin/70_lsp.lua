@@ -1,5 +1,5 @@
-local add, later, on_filetype, gh =
-	Config.add, Config.later, Config.on_filetype, Config.gh
+local add, now, later, on_filetype, gh =
+	Config.add, Config.now, Config.later, Config.on_filetype, Config.gh
 
 on_filetype("lua", function()
 	add({ gh("folke/lazydev.nvim") })
@@ -7,7 +7,7 @@ on_filetype("lua", function()
 	require("lazydev").setup()
 end)
 
-later(function()
+now(function()
 	add({
 		gh("mason-org/mason.nvim"),
 		gh("mason-org/mason-lspconfig.nvim"),
@@ -18,6 +18,7 @@ later(function()
 
 	require("mason").setup()
 	require("mason-lspconfig").setup()
+
 	require("mason-tool-installer").setup({
 		ensure_installed = {
 			-- Go
@@ -33,13 +34,15 @@ later(function()
 			"yamlls",
 			"css-lsp",
 			"eslint_d",
-			"html_lsp",
+			"html-lsp",
 			"prettierd",
 
 			-- Other
 			"lua_ls",
+			"stylua",
 			"terraform-ls",
 		},
+		run_on_start = true,
 	})
 
 	vim.lsp.inlay_hint.enable(false)
@@ -83,7 +86,25 @@ later(function()
 			"Hover Documentation"
 		)
 
-		map("<leader>cr", function() vim.lsp.buf.rename() end, "[C]ode [R]ename")
+		map("<leader>cr", function()
+			local original_height = vim.o.cmdwinheight
+			vim.api.nvim_create_autocmd("CmdlineEnter", {
+				once = true,
+				callback = function()
+					vim.o.cmdwinheight = 1
+					local enter_cmd_key =
+						vim.api.nvim_replace_termcodes("<C-f>", true, false, true)
+					vim.api.nvim_feedkeys(enter_cmd_key, "c", false)
+					vim.api.nvim_feedkeys("A", "n", false)
+
+					vim.api.nvim_create_autocmd("CmdwinLeave", {
+						once = true,
+						callback = function() vim.o.cmdwinheight = original_height end,
+					})
+				end,
+			})
+			vim.lsp.buf.rename()
+		end, "[C]ode [R]ename")
 
 		map(
 			"<leader>cA",
@@ -165,6 +186,7 @@ later(function()
 			yaml = { "prettierd" },
 			markdown = { "prettierd" },
 			["markdown.mdx"] = { "prettierd" },
+			python = { "black" },
 		},
 		formatters = {
 			pg_format = {

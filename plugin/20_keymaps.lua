@@ -25,8 +25,8 @@
 
 Config.keymap.nmap_leader("uw", "<cmd>set wrap!<CR>", "Toggle line wrap")
 
-Config.keymap.vmap("J", ":m '>+1<CR>gv=gv")
-Config.keymap.vmap("K", ":m '<-2<CR>gv=gv")
+Config.keymap.vmap("J", ":m '>+1<CR>gv=gv", nil, { silent = true })
+Config.keymap.vmap("K", ":m '<-2<CR>gv=gv", nil, { silent = true })
 
 Config.keymap.nmap(
 	"]d",

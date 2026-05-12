@@ -40,11 +40,24 @@ end
 -- Keymap utilities
 local K = {}
 
-K.nmap = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc }) end
-K.vmap = function(lhs, rhs, desc) vim.keymap.set("v", lhs, rhs, { desc = desc }) end
-K.xmap = function(lhs, rhs, desc) vim.keymap.set("x", lhs, rhs, { desc = desc }) end
-K.nmap_leader = function(suffix, rhs, desc) K.nmap("<Leader>" .. suffix, rhs, desc) end
-K.xmap_leader = function(suffix, rhs, desc) K.xmap("<Leader>" .. suffix, rhs, desc) end
+K.map = function(mode, lhs, rhs, desc, opts)
+	vim.keymap.set(
+		mode,
+		lhs,
+		rhs,
+		vim.tbl_extend("force", opts or {}, { desc = desc })
+	)
+end
+
+K.nmap = function(lhs, rhs, desc, opts) K.map("n", lhs, rhs, desc, opts) end
+K.vmap = function(lhs, rhs, desc, opts) K.map("v", lhs, rhs, desc, opts) end
+K.xmap = function(lhs, rhs, desc, opts) K.map("x", lhs, rhs, desc, opts) end
+K.nmap_leader = function(suffix, rhs, desc, opts)
+	K.nmap("<Leader>" .. suffix, rhs, desc, opts)
+end
+K.xmap_leader = function(suffix, rhs, desc, opts)
+	K.xmap("<Leader>" .. suffix, rhs, desc, opts)
+end
 
 Config.keymap = K
 

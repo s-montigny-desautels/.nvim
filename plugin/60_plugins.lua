@@ -1,4 +1,3 @@
-
 local add = Config.add
 
 local gh = Config.gh
@@ -356,4 +355,30 @@ later(function()
 		persistence.load,
 		{ desc = "[S]ession [R]eload" }
 	)
+end)
+
+later(function()
+	add({ gh("windwp/nvim-ts-autotag") })
+
+	require("nvim-ts-autotag").setup({
+		opts = {
+			enable_close = true,
+			enable_rename = true,
+			enable_close_on_slash = false,
+		},
+	})
+end)
+
+later(function()
+	add({ gh("lewis6991/gitsigns.nvim") })
+
+	require("gitsigns").setup({
+		signs_staged_enable = false,
+		signcolumn = false,
+		current_line_blame = true,
+		auto_attach = true,
+		current_line_blame_opts = {
+			delay = 500,
+		},
+	})
 end)

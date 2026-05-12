@@ -83,3 +83,9 @@ Config.new_autocmd("FileType", {
 		desc = "Quit buffer",
 	})
 end, "Close some filetypes with <q>")
+
+Config.new_autocmd(
+	"CmdwinEnter",
+	nil,
+	function() vim.keymap.set("n", "<esc>", ":quit<CR>", { buffer = true }) end
+)
