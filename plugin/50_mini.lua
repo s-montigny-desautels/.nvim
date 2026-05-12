@@ -27,7 +27,7 @@ now(function()
 	})
 end)
 
-now(function() require("mini.sessions").setup() end)
+-- now(function() require("mini.sessions").setup() end)
 
 now(function()
 	require("mini.statusline").setup({
@@ -100,22 +100,22 @@ later(function() require("mini.ai").setup() end)
 
 later(function() require("mini.surround") end)
 
-later(function() require("mini.git").setup() end)
+-- later(function() require("mini.git").setup() end)
 
-later(function()
-	require("mini.diff").setup({
-		view = {
-			style = "sign",
-			signs = { add = "+", change = "~", delete = "-" },
-		},
-		options = {
-			wrap_goto = true,
-		},
-	})
-
-	-- Config.keymap.nmap("]h", function() MiniDiff.goto_hunk("next") end, "Next Hunk")
-	-- Config.keymap.nmap("[h", function() MiniDiff.goto_hunk("prev") end, "Prev Hunk")
-end)
+-- later(function()
+-- 	require("mini.diff").setup({
+-- 		view = {
+-- 			style = "sign",
+-- 			signs = { add = "+", change = "~", delete = "-" },
+-- 		},
+-- 		options = {
+-- 			wrap_goto = true,
+-- 		},
+-- 	})
+--
+-- 	-- Config.keymap.nmap("]h", function() MiniDiff.goto_hunk("next") end, "Next Hunk")
+-- 	-- Config.keymap.nmap("[h", function() MiniDiff.goto_hunk("prev") end, "Prev Hunk")
+-- end)
 
 later(function() require("mini.extra").setup() end)
 
